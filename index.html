@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Időpontfoglaló rendszer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Fodrász Időpontfoglaló</h1>
+  <div id="hairdresserList"></div>
+  <div id="appointmentForm" style="display: none;">
+    <h2>Időpontfoglalás</h2>
+    <form id="bookingForm">
+      <label for="customerName">Név:</label>
+      <input type="text" id="customerName" required>
+      
+      <label for="customerPhone">Telefon:</label>
+      <input type="tel" id="customerPhone" required>
+
+      <label for="date">Dátum:</label>
+      <input type="date" id="date" required>
+      
+      <button type="submit" class="primary-btn">Lefoglalom</button>
+    </form>
+  </div>
+
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
