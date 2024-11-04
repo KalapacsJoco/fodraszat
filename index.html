@@ -1,42 +1,60 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Időpontfoglaló rendszer</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online fodrász időpontfoglaló</title>
+    <style>
+        /* Alapvető CSS stílusok */
+        body {
+            font-family: sans-serif;
+        }
+        .hairdresser {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #appointment-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .time-slot {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .time-slot.booked {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-  <h1>Fodrász Időpontfoglaló</h1>
-  
-  <!-- Fodrászok megjelenítése -->
-  <div id="hairdresserList"></div>
+    <h1>Online fodrász időpontfoglaló</h1>
 
-  <!-- Időpontfoglaló form (kezdetben rejtett) -->
-  <div id="appointmentForm" style="display: none;">
-    <h2>Időpontfoglalás</h2>
-    <form id="bookingForm">
-      <label for="date">Dátum:</label>
-      <input type="date" id="date" required><br>
+    <div id="hairdresser-list"></div>
 
-      <div id="appointmentTimes"></div> <!-- Időpontok megjelenítése -->
+    <div id="appointment-form">
+        <h2>Időpontfoglalás</h2>
+        <label for="appointment-date">Dátum:</label>
+        <input type="date" id="appointment-date"><br><br>
+        <div id="appointment-times"></div>
+        <label for="appointment-name">Név:</label>
+        <input type="text" id="appointment-name"><br><br>
+        <label for="appointment-phone">Telefonszám:</label>
+        <input type="tel" id="appointment-phone"><br><br>
+        <button id="appointment-submit">Foglalás</button>
+    </div>
 
-      <label for="customerName">Név:</label>
-      <input type="text" id="customerName" required><br>
-
-      <label for="customerPhone">Telefon:</label>
-      <input type="tel" id="customerPhone" required><br>
-
-      <button type="submit">Lefoglalom</button>
-    </form>
-  </div>
-
-  <!-- Visszaigazoló üzenet -->
-  <div id="confirmation" style="display: none;">
-    <h2>Sikeres foglalás!</h2>
-    <button onclick="goBack()">Vissza a fodrászokhoz</button>
-  </div>
-
-  <script src="./app.js" type="module"></script>
+    <script src="app.js"></script>
 </body>
 </html>

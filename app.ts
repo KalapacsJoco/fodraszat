@@ -1,138 +1,175 @@
-import { ApiService } from './apiService.js';
+// API végpontok
+const API_BASE_URL = 'http://salonsapi.prooktatas.hu/api';
+const HAIRDRESSERS_URL = `${API_BASE_URL}/hairdressers`;
+const APPOINTMENTS_URL = `${API_BASE_URL}/appointments`;
 
-const apiService = new ApiService();
+// Fodrász adatszerkezet
+interface Hairdresser {
+  id: number;
+  name: string;
+  email: string;
+  phone_number: string;
+  work_start_time: string;
+  work_end_time: string;
+  services: string[]; 
+}
 
-const hairdresserList = document.getElementById('hairdresserList')!;
-const appointmentForm = document.getElementById('appointmentForm') as HTMLDivElement;
-const bookingForm = document.getElementById('bookingForm') as HTMLFormElement;
-const appointmentTimes = document.getElementById('appointmentTimes') as HTMLDivElement;
-let selectedHairdresserId: number | null = null;
-let selectedHairdresserWorkHours: { start: string; end: string } | null = null;
-let selectedDate: string | null = null;
+// Időpont adatszerkezet
+interface Appointment {
+  hairdresser_id: number;
+  customer_name: string;
+  customer_phone: string;
+  appointment_date: string;
+  service: string;
+}
 
-// Fodrászok betöltése
-async function loadHairdressers() {
-  try {
-    const hairdressers = await apiService.getHairdressers();
-    console.log("Fodrászok betöltése:", hairdressers);
-    hairdresserList.innerHTML = '';
+// HTML elemek
+const hairdresserList: HTMLElement | null = document.getElementById('hairdresser-list');
+const appointmentForm: HTMLElement | null = document.getElementById('appointment-form');
+const appointmentDateInput: HTMLInputElement | null = document.getElementById('appointment-date') as HTMLInputElement;
+const appointmentTimes: HTMLElement | null = document.getElementById('appointment-times');
+const appointmentNameInput: HTMLInputElement | null = document.getElementById('appointment-name') as HTMLInputElement;
+const appointmentPhoneInput: HTMLInputElement | null = document.getElementById('appointment-phone') as HTMLInputElement;
+const appointmentSubmitButton: HTMLElement | null = document.getElementById('appointment-submit');
 
-    hairdressers.forEach((hairdresser: any) => {
-      const div = document.createElement('div');
-      div.className = 'hairdresser-box';
+// Fodrászok listájának lekérése
+async function getHairdressers(): Promise<Hairdresser[]> {
+  const response = await fetch(HAIRDRESSERS_URL);
+  return await response.json();
+}
 
-      const servicesList = hairdresser.services.map((service: string) => `<h4>${service}</h4>`).join('');
-
-      div.innerHTML = `
-        <h3>${hairdresser.name}</h3>
-        <h4>${hairdresser.email}</h4>
-        <h4>${hairdresser.phone_number}</h4>
-        <h4>${hairdresser.work_start_time}</h4>
-        <h4>${hairdresser.work_end_time}</h4>
-        <div>${servicesList}</div>
-        <button onclick="bookAppointment(${hairdresser.id}, '${hairdresser.work_start_time}', '${hairdresser.work_end_time}')" class="book-btn">Foglalás</button>
+// Fodrászok megjelenítése
+async function displayHairdressers() {
+  if (hairdresserList) {
+    const hairdressers = await getHairdressers();
+    hairdressers.forEach(hairdresser => {
+      const servicesList = hairdresser.services.map(service => `<li>${service}</li>`).join('');
+      const hairdresserElement = `
+        <div class="hairdresser">
+          <h3>${hairdresser.name}</h3>
+          <p>${hairdresser.email}</p>
+          <p>${hairdresser.phone_number}</p>
+          <p>Munkaidő: ${hairdresser.work_start_time} - ${hairdresser.work_end_time}</p>
+          <ul>${servicesList}</ul> 
+          <button data-hairdresser-id="${hairdresser.id}">Időpontfoglalás</button>
+        </div>
       `;
-      
-      hairdresserList.appendChild(div);
+      hairdresserList.innerHTML += hairdresserElement;
     });
-  } catch (error) {
-    console.error('Error loading hairdressers:', error);
+
+    // Időpontfoglalás gomb eseménykezelő
+    const appointmentButtons = document.querySelectorAll('.hairdresser button');
+    appointmentButtons.forEach(button => {
+      const buttonElement = button as HTMLElement; // Típuskényszerítés
+      buttonElement.addEventListener('click', () => {
+        const hairdresserId = buttonElement.dataset.hairdresserId;
+        if (hairdresserId) {
+          const selectedHairdresser = hairdressers.find(h => h.id === parseInt(hairdresserId));
+          if (selectedHairdresser) {
+            showAppointmentForm(selectedHairdresser);
+          }
+        }
+      });
+    });
   }
 }
 
-// Foglalás gomb eseménykezelő
-(window as any).bookAppointment = async (hairdresserId: number, workStart: string, workEnd: string) => {
-  console.log(workStart)
-  selectedHairdresserId = hairdresserId;
-  selectedHairdresserWorkHours = { start: workStart, end: workEnd };
-  appointmentForm.style.display = 'block';
+// Időpontfoglalás űrlap megjelenítése
+function showAppointmentForm(hairdresser: Hairdresser) {
+  if (appointmentForm) {
+    appointmentForm.style.display = 'block';
+  }
 
-  // Törli az előző időpontokat
-  // appointmentTimes.innerHTML = '';
+  if (appointmentDateInput) {
+    appointmentDateInput.addEventListener('change', () => {
+      displayAvailableAppointments(hairdresser, appointmentDateInput.value);
+    });
+  }
+}
 
-  const dateInput = document.getElementById('date') as HTMLInputElement;
-  dateInput.addEventListener('change', async () => {
-    selectedDate = dateInput.value;
-    console.log("Kiválasztott dátum:", selectedDate);
-    if (selectedDate && selectedHairdresserId) {
-      try {
-        const appointments = await apiService.getAppointment();
-        console.log("Lekért foglalások:", appointments);
-        displayBookedTimes(appointments, selectedDate);
-      } catch (error) {
-        console.error('Error loading appointments:', error);
+// Elérhető időpontok megjelenítése
+async function displayAvailableAppointments(hairdresser: Hairdresser, date: string) {
+  if (appointmentTimes) {
+    appointmentTimes.innerHTML = '';
+
+    const appointments = await getAppointments(hairdresser.id, date);
+
+    const startTime = parseInt(hairdresser.work_start_time.split(':')[0]) * 60;
+    const endTime = parseInt(hairdresser.work_end_time.split(':')[0]) * 60;
+
+    for (let time = startTime; time < endTime; time += 30) {
+      const timeSlot = document.createElement('div');
+      timeSlot.classList.add('time-slot');
+      const formattedTime = formatTime(time);
+      timeSlot.textContent = formattedTime;
+
+      const isBooked = appointments.some(appointment => {
+        const appointmentTime = new Date(appointment.appointment_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return appointmentTime === formattedTime;
+      });
+
+      if (isBooked) {
+        timeSlot.classList.add('booked');
+      } else {
+        timeSlot.addEventListener('click', () => {
+          if (appointmentNameInput && appointmentPhoneInput) {
+            const appointment: Appointment = {
+              hairdresser_id: hairdresser.id,
+              customer_name: appointmentNameInput.value,
+              customer_phone: appointmentPhoneInput.value,
+              appointment_date: `${date} ${formattedTime}`,
+              service: 'Hajvágás' 
+            };
+            bookAppointment(appointment);
+          }
+        });
       }
+
+      appointmentTimes.appendChild(timeSlot);
     }
-  });
-};
-
-// Félórás intervallumok létrehozása adott munkaidő alapján
-function createTimeIntervals(start: string, end: string) {
-  const intervals = [];
-  let currentTime = new Date(`1970-01-01T${start}:00`);
-  const endTime = new Date(`1970-01-01T${end}:00`);
-
-  while (currentTime < endTime) {
-    intervals.push(new Date(currentTime));
-    currentTime.setMinutes(currentTime.getMinutes() + 30);
   }
-  console.log("Létrehozott időintervallumok:", intervals);
-  return intervals;
 }
 
-// Időpontok megjelenítése a kiválasztott napra és fodrászra
-async function displayBookedTimes(appointments: any[], date: string) {
-  if (!selectedHairdresserWorkHours || !selectedHairdresserId) return;
-
-  const { start, end } = selectedHairdresserWorkHours;
-  const timeSlots = createTimeIntervals(start, end);
-
-  // Szűrjük a kiválasztott fodrász adott napi foglalt időpontjait
-  const bookedTimes = appointments
-    .filter(appt => 
-      appt.hairdresser_id === String(selectedHairdresserId) &&
-      appt.appointment_date.startsWith(date)
-    )
-    .map(appt => new Date(appt.appointment_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-
-  console.log("Foglalások a kiválasztott napra:", bookedTimes);
-
-  // Minden intervallumhoz megjelenít egy "Foglalt" vagy "Szabad" státuszt
-  appointmentTimes.innerHTML = '<h4>Elérhető időpontok:</h4>';
-  const timesList = timeSlots.map(time => {
-    const timeStr = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const isBooked = bookedTimes.includes(timeStr);
-    return `<li>${timeStr} - ${isBooked ? 'Foglalt' : `<button onclick="selectTime('${timeStr}')">Szabad</button>`}</li>`;
-  }).join('');
-  appointmentTimes.innerHTML += `<ul>${timesList}</ul>`;
+// Időpontok lekérése
+async function getAppointments(hairdresserId: number, date: string): Promise<Appointment[]> {
+  const response = await fetch(APPOINTMENTS_URL);
+  const appointments: Appointment[] = await response.json();
+  return appointments.filter(appointment => 
+    appointment.hairdresser_id === hairdresserId && 
+    appointment.appointment_date.startsWith(date)
+  );
 }
 
-// Kiválasztott időpont kezelése
-(window as any).selectTime = (time: string) => {
-  if (!selectedDate || !selectedHairdresserId) return;
+// Idő formázása
+function formatTime(timeInMinutes: number): string {
+  const hours = Math.floor(timeInMinutes / 60);
+  const minutes = timeInMinutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
 
-  // Összeállítja az időpontfoglalási adatokat
-  const customerName = (document.getElementById('customerName') as HTMLInputElement).value;
-  const customerPhone = (document.getElementById('customerPhone') as HTMLInputElement).value;
-  const appointmentData = {
-    hairdresser_id: selectedHairdresserId,
-    customer_name: customerName,
-    customer_phone: customerPhone,
-    appointment_date: `${selectedDate} ${time}:00`,
-    service: 'Hajvágás'
-  };
-
-  apiService.createAppointment(appointmentData)
-    .then(() => {
-      alert('Sikeres foglalás!');
-      appointmentForm.style.display = 'none';
-      loadHairdressers();
-    })
-    .catch(error => {
-      console.error('Error creating appointment:', error);
-      alert('Hiba történt a foglalás során.');
+// Időpontfoglalás
+async function bookAppointment(appointment: Appointment) {
+  try {
+    const response = await fetch(APPOINTMENTS_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(appointment)
     });
-};
 
-// Oldal betöltésekor a fodrászok betöltése
-loadHairdressers();
+    if (response.ok) {
+      console.log('Időpontfoglalás sikeres!');
+      // TODO: Sikeres foglalás esetén visszajelzés a felhasználónak
+    } else {
+      console.error('Hiba történt az időpontfoglalás során!');
+      // TODO: Hiba esetén hibaüzenet megjelenítése
+    }
+  } catch (error) {
+    console.error('Hiba történt az időpontfoglalás során:', error);
+    // TODO: Hiba esetén hibaüzenet megjelenítése
+  }
+}
+
+// Inicializálás
+displayHairdressers();

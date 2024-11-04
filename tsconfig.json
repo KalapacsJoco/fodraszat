@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2016",                                 
-    "module": "es6",                                
-    "rootDir": "./",                                  
-    "esModuleInterop": true,                            
-    "forceConsistentCasingInFileNames": true,            
-    "strict": true,                                     
-    "skipLibCheck": true                                
+    "target": "es2017",       // Módosítva es2016-ról es2017-re
+    "module": "es6",
+    "rootDir": "./",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
   }
 }

@@ -16,12 +16,20 @@ export class ApiService {
     return response.json();
   }
 
-  async getAppointment() {
-    const response = await fetch(`${this.apiBaseUrl}/appointments`, {
+  async getAppointment(hairdresserId?: number) {
+    let url = `${this.apiBaseUrl}/appointments`;
+  
+    // Ha megadtuk a fodrász ID-jét, akkor hozzáadjuk a lekérdezési paraméterhez
+    if (hairdresserId) {
+      url += `?hairdresserId=${hairdresserId}`;
+    }
+  
+    const response = await fetch(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
-    if (!response.ok) throw new Error('Nem sikerült létrehozni a foglalást');
+  
+    if (!response.ok) throw new Error('Nem sikerült lekérni a foglalásokat');
     return response.json();
   }
 
