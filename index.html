@@ -8,21 +8,33 @@
 </head>
 <body>
   <h1>Fodrász Időpontfoglaló</h1>
+  
+  <!-- Fodrászok megjelenítése -->
   <div id="hairdresserList"></div>
+
+  <!-- Időpontfoglaló form (kezdetben rejtett) -->
   <div id="appointmentForm" style="display: none;">
     <h2>Időpontfoglalás</h2>
     <form id="bookingForm">
-      <label for="customerName">Név:</label>
-      <input type="text" id="customerName" required>
-      
-      <label for="customerPhone">Telefon:</label>
-      <input type="tel" id="customerPhone" required>
-
       <label for="date">Dátum:</label>
-      <input type="date" id="date" required>
-      
-      <button type="submit" class="primary-btn">Lefoglalom</button>
+      <input type="date" id="date" required><br>
+
+      <div id="appointmentTimes"></div> <!-- Időpontok megjelenítése -->
+
+      <label for="customerName">Név:</label>
+      <input type="text" id="customerName" required><br>
+
+      <label for="customerPhone">Telefon:</label>
+      <input type="tel" id="customerPhone" required><br>
+
+      <button type="submit">Lefoglalom</button>
     </form>
+  </div>
+
+  <!-- Visszaigazoló üzenet -->
+  <div id="confirmation" style="display: none;">
+    <h2>Sikeres foglalás!</h2>
+    <button onclick="goBack()">Vissza a fodrászokhoz</button>
   </div>
 
   <script src="./app.js" type="module"></script>
