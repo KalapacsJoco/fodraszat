@@ -75,7 +75,7 @@ async function displayAvailableAppointments(hairdresser, date) {
             const isBooked = checkIfBooked(appointments, hairdresser.id, date, formattedTime);
             if (isBooked) {
                 timeSlot.classList.add('booked');
-                timeSlot.textContent += ' (Foglalt)';
+                // timeSlot.textContent += ' (Foglalt)';
             }
             else {
                 // Attach booking event for free time slots

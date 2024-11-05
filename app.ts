@@ -108,7 +108,7 @@ async function displayAvailableAppointments(hairdresser: Hairdresser, date: stri
 
       if (isBooked) {
         timeSlot.classList.add('booked');
-        timeSlot.textContent += ' (Foglalt)';
+        // timeSlot.textContent += ' (Foglalt)';
       } else {
         // Attach booking event for free time slots
         timeSlot.addEventListener('click', () => {
