@@ -26,11 +26,13 @@ interface Appointment {
 }
 
 
+
 // HTML elements
 const hairdresserList = document.getElementById('hairdresser-list');
 const appointmentForm = document.getElementById('appointment-form');
 const appointmentDateInput = document.getElementById('appointment-date') as HTMLInputElement;
 const appointmentTimes = document.getElementById('appointment-times');
+const appointmentServices = document.getElementById('appointment-services');
 const appointmentNameInput = document.getElementById('appointment-name') as HTMLInputElement;
 const appointmentPhoneInput = document.getElementById('appointment-phone') as HTMLInputElement;
 const appointmentSubmitButton = document.getElementById('appointment-submit') as HTMLButtonElement;
@@ -39,6 +41,7 @@ const appointmentSubmitButton = document.getElementById('appointment-submit') as
 let selectedTimeSlot: string | null = null;
 let selectedHairdresser: Hairdresser | null = null;
 let selectedDate: string | null = null;
+let selectedService: string | null = null;
 
 // Fetch list of hairdressers
 async function getHairdressers(): Promise<Hairdresser[]> {
@@ -87,6 +90,25 @@ function showAppointmentForm(hairdresser: Hairdresser) {
     if (appointmentForm) {
         appointmentForm.style.display = 'block';
         selectedHairdresser = hairdresser;
+
+        // Generate service checkboxes
+        if (appointmentServices) {
+            appointmentServices.innerHTML = '<h3>Szolgáltatások:</h3>';
+            hairdresser.services.forEach(service => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'service';
+                checkbox.value = service;
+                checkbox.addEventListener('change', () => handleServiceSelection(checkbox));
+                
+                const label = document.createElement('label');
+                label.textContent = service;
+                
+                appointmentServices.appendChild(checkbox);
+                appointmentServices.appendChild(label);
+                appointmentServices.appendChild(document.createElement('br'));
+            });
+        }
     }
 
     if (appointmentDateInput) {
@@ -95,6 +117,15 @@ function showAppointmentForm(hairdresser: Hairdresser) {
             displayAvailableAppointments(hairdresser, appointmentDateInput.value);
         });
     }
+}
+
+// Handle service selection (only allow one checkbox to be selected at a time)
+function handleServiceSelection(checkbox: HTMLInputElement) {
+    const checkboxes = document.querySelectorAll('input[name="service"]') as NodeListOf<HTMLInputElement>;
+    checkboxes.forEach(cb => {
+        if (cb !== checkbox) cb.checked = false;
+    });
+    selectedService = checkbox.checked ? checkbox.value : null;
 }
 
 // Display available appointments
@@ -118,14 +149,9 @@ async function displayAvailableAppointments(hairdresser: Hairdresser, date: stri
             if (isBooked) {
                 timeSlot.classList.add('booked');
             } else {
-                // Click event to select a time slot
                 timeSlot.addEventListener('click', () => {
-                    // Deselect previous time slot
                     const previouslySelected = document.querySelector('.time-slot.selected');
-                    if (previouslySelected) {
-                        previouslySelected.classList.remove('selected');
-                    }
-                    // Select current time slot
+                    if (previouslySelected) previouslySelected.classList.remove('selected');
                     timeSlot.classList.add('selected');
                     selectedTimeSlot = formattedTime;
                 });
@@ -166,23 +192,23 @@ function formatTime(timeInMinutes: number): string {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
 
-// Book appointment when "Foglalás" button is clicked
+// Book appointment
 appointmentSubmitButton?.addEventListener('click', () => {
-    if (selectedHairdresser && selectedDate && selectedTimeSlot && appointmentNameInput?.value && appointmentPhoneInput?.value) {
+    if (selectedHairdresser && selectedDate && selectedTimeSlot && selectedService && appointmentNameInput?.value && appointmentPhoneInput?.value) {
         const appointment: Appointment = {
             hairdresser_id: selectedHairdresser.id.toString(),
             customer_name: appointmentNameInput.value,
             customer_phone: appointmentPhoneInput.value,
             appointment_date: `${selectedDate} ${selectedTimeSlot}`,
-            service: 'Hajvágás'
+            service: selectedService
         };
         bookAppointment(appointment);
     } else {
-        alert('Kérjük, válasszon egy időpontot és adja meg a szükséges adatokat.');
+        alert('Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat.');
     }
 });
 
-// Book appointment
+// Book appointment function
 async function bookAppointment(appointment: Appointment) {
     try {
         const response = await fetch(APPOINTMENTS_URL, {
@@ -196,7 +222,6 @@ async function bookAppointment(appointment: Appointment) {
         if (response.ok) {
             console.log('Időpontfoglalás sikeres!');
             alert('Időpontfoglalás sikeres!');
-            // Refresh appointments to show new booking
             if (selectedHairdresser && selectedDate) {
                 displayAvailableAppointments(selectedHairdresser, selectedDate);
             }

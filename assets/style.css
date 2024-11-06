@@ -75,6 +75,8 @@ h1 {
 }
 
 #appointment-form {
+  /* height: 50%; */
+  /* overflow: auto; */
   display: none;
   position: fixed;
   top: 50%;
@@ -118,6 +120,10 @@ h1 {
 
 #appointment-form button:hover {
   background-color: #218838;
+}
+
+#appointment-services {
+  display: flex;
 }
 
 .time-slot {
