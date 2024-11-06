@@ -1,0 +1,143 @@
+body {
+  font-family: "Roboto", sans-serif; /* Modern betűtípus */
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  margin: 0;
+}
+
+.hairdresser-list {
+  width: 50%;
+}
+
+.container {
+  /* width: 50%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(245, 245, 245, 1); /* Világos, semleges háttér */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Enyhén hangsúlyosabb árnyék */
+  border-radius: 5px;
+}
+
+.hairdresser {
+  /* border: thin solid black; */
+  background-color: rgba(255, 250, 240, 1); /* Krémszínű kiemelés */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Lágyabb árnyék */
+  margin: 5px;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hairdresser img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.hairdresser-info h3 {
+  margin: 0 0 5px 0;
+}
+
+.hairdresser-info p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #777;
+}
+
+.hairdresser button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: auto;
+  transition: background-color 0.3s;
+}
+
+.hairdresser button:hover {
+  background-color: #0056b3;
+}
+
+#appointment-form {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* A form legyen felül */
+  max-width: 500px;
+  width: 90%;
+}
+
+#appointment-form h2 {
+  margin-top: 0;
+}
+
+#appointment-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#appointment-form input,
+#appointment-form button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+#appointment-form button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#appointment-form button:hover {
+  background-color: #218838;
+}
+
+.time-slot {
+  background-color: #28a745;
+  color: white;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.time-slot:hover {
+  background-color: #218838;
+}
+
+.time-slot.booked {
+  background-color: #dc3545;
+  color: white;
+  cursor: not-allowed;
+}
