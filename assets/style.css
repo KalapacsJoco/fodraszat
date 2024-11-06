@@ -32,7 +32,7 @@ h1 {
 
 .hairdresser {
   /* border: thin solid black; */
-  background-color: rgba(255, 250, 240, 1); /* Krémszínű kiemelés */
+  background-color: rgba(18, 190, 27, 0.15); /* Krémszínű kiemelés */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Lágyabb árnyék */
   margin: 5px;
   margin-bottom: 35px;
@@ -159,4 +159,27 @@ h1 {
 
 .time-slot.selected {
   background-color: #217288;
+}
+
+#appointment-form-close-button {
+  /* position: relative;  */
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: calc(100% - 30px); /* A jobb széltől 30px-re */
+  background-color: lightcoral;
+  color: black; /* Sötétszürke szöveg */
+  border: none;
+  padding: 10px 10px;
+  border-radius: 50%; 
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s; /* Áttűnés a hover effektushoz */
+}
+
+#appointment-form-close-button:hover {
+  background-color: rgb(245, 76, 76); /* Sötétebb háttérszín hover-kor */
+  color: #333; /* Sötétebb szöveg hover-kor */
 }
