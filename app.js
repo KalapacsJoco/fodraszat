@@ -34,6 +34,7 @@ async function displayHairdressers() {
             const hairdresserElement = `
                 <div class="hairdresser">
                     <h3>${hairdresser.name}</h3>
+                    <img src="/assets/images/${hairdresser.id}.jpg" alt="Kép leírása">
                     <p>${hairdresser.email}</p>
                     <p>${hairdresser.phone_number}</p>
                     <p>Munkaidő: ${hairdresser.work_start_time} - ${hairdresser.work_end_time}</p>

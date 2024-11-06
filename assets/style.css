@@ -14,7 +14,7 @@ h1 {
 }
 
 .hairdresser-list {
-  width: 50%;
+  width: 65%;
 }
 
 .container {
@@ -32,6 +32,7 @@ h1 {
 
 .hairdresser {
   /* border: thin solid black; */
+  position: relative;
   background-color: rgba(18, 190, 27, 0.15); /* Krémszínű kiemelés */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Lágyabb árnyék */
   margin: 5px;
@@ -45,10 +46,14 @@ h1 {
 }
 
 .hairdresser img {
-  width: 80px;
-  height: 80px;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  margin-right: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 1); /* Lágyabb árnyék */
+
 }
 
 .hairdresser-info h3 {
