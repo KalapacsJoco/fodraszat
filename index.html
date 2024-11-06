@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Online fodrász időpontfoglaló</title>
-    <link rel="stylesheet" href="./assets/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
     <h1>Online fodrász időpontfoglaló</h1>
 
     <div class="container">
-        <div id="hairdresser-list" class="hairdresser-list"></div>
+      <div id="hairdresser-list" class="hairdresser-list"></div>
     </div>
 
     <div id="appointment-form">
+      <div class="appointment-form-head">
         <h2>Időpontfoglalás</h2>
-        <label for="appointment-date">Dátum:</label>
-        <input type="date" id="appointment-date"><br><br>
-        <div id="appointment-times"></div>
+        <div id="appointment-form-close-button">x</div>
+      </div>
+      <label for="appointment-date">Dátum:</label>
+      <input type="date" id="appointment-date" /><br /><br />
+      <div id="appointment-times"></div>
 
-        <!-- Services checkboxes will be inserted here -->
-        <div id="appointment-services"></div>
+      <!-- Services checkboxes will be inserted here -->
+      <div id="appointment-services"></div>
 
-        <label for="appointment-name">Név:</label>
-        <input type="text" id="appointment-name"><br><br>
-        <label for="appointment-phone">Telefonszám:</label>
-        <input type="tel" id="appointment-phone"><br><br>
-        <button id="appointment-submit">Foglalás</button>
+      <label for="appointment-name">Név:</label>
+      <input type="text" id="appointment-name" /><br /><br />
+      <label for="appointment-phone">Telefonszám:</label>
+      <input type="tel" id="appointment-phone" /><br /><br />
+      <button id="appointment-submit">Foglalás</button>
     </div>
 
     <script src="app.js"></script>
-</body>
+  </body>
 </html>

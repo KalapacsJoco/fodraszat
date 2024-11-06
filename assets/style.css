@@ -35,6 +35,8 @@ h1 {
   background-color: rgba(255, 250, 240, 1); /* Krémszínű kiemelés */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Lágyabb árnyék */
   margin: 5px;
+  margin-bottom: 35px;
+  border-radius: 20px;
   border-bottom: 1px solid #eee;
   padding: 15px 0;
   display: flex;
@@ -91,6 +93,11 @@ h1 {
   width: 90%;
 }
 
+.appointment-form-head {
+  display: flex;
+  justify-content: space-between;
+}
+
 #appointment-form h2 {
   margin-top: 0;
 }
@@ -104,7 +111,7 @@ h1 {
 #appointment-form button {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   border: 1px solid #ddd;
   border-radius: 5px;
   box-sizing: border-box;
@@ -124,6 +131,8 @@ h1 {
 
 #appointment-services {
   display: flex;
+  align-items: center;
+  height: 35px;
 }
 
 .time-slot {
