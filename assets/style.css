@@ -141,3 +141,7 @@ h1 {
   color: white;
   cursor: not-allowed;
 }
+
+.time-slot.selected {
+  background-color: #217288;
+}
