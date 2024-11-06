@@ -1,6 +1,6 @@
 body {
   font-family: "Roboto", sans-serif; /* Modern betűtípus */
-  background-color: #f4f4f4;
+  background-color: #2f3d4c;
   color: #333;
   margin: 0;
 }
@@ -25,7 +25,6 @@ h1 {
   width: auto;
   margin: 20px auto;
   padding: 20px;
-  background-color: rgba(245, 245, 245, 1); /* Világos, semleges háttér */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Enyhén hangsúlyosabb árnyék */
   border-radius: 5px;
 }
@@ -33,24 +32,26 @@ h1 {
 .hairdresser {
   /* border: thin solid black; */
   position: relative;
-  background-color: rgba(18, 190, 27, 0.15); /* Krémszínű kiemelés */
+  background-color: rgba(151, 159, 165, 0.75);
+  
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Lágyabb árnyék */
   margin: 5px;
   margin-bottom: 35px;
   border-radius: 20px;
   border-bottom: 1px solid #eee;
   padding: 15px 0;
+  padding-left: 100px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .hairdresser img {
   position: absolute;
   top: 10%;
   right: 10%;
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 1); /* Lágyabb árnyék */
 
