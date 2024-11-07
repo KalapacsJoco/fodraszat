@@ -1,5 +1,7 @@
 {
+  "type": "module",
   "dependencies": {
     "moment-timezone": "^0.5.46"
   }
 }
+

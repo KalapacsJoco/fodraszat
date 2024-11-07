@@ -1,29 +1,11 @@
-// API endpoints
+import { Hairdresser } from './interfaces/Hairdresser';
+import { Appointment } from './interfaces/Appointment';
+// import { displayHairdressers, } from './interfaces/Appointment';
+// import { API_BASE_URL, HAIRDRESSERS_URL, APPOINTMENTS_URL } from './apiEndPoint';
+
 const API_BASE_URL = "http://salonsapi.prooktatas.hu/api";
 const HAIRDRESSERS_URL = `${API_BASE_URL}/hairdressers`;
 const APPOINTMENTS_URL = `${API_BASE_URL}/appointments`;
-
-// Hairdresser structure
-interface Hairdresser {
-  id: number;
-  name: string;
-  email: string;
-  phone_number: string;
-  work_start_time: string;
-  work_end_time: string;
-  services: string[];
-}
-
-// Appointment structure
-interface Appointment {
-  id?: string;
-  hairdresser_id: string;
-  customer_name: string;
-  customer_phone: string;
-  appointment_date: string;
-  service: string;
-  created_at?: string;
-}
 
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
@@ -51,6 +33,7 @@ let selectedTimeSlot: string | null = null;
 let selectedHairdresser: Hairdresser | null = null;
 let selectedDate: string | null = null;
 let selectedService: string | null = null;
+
 
 // Fetch list of hairdressers
 async function getHairdressers(): Promise<Hairdresser[]> {
@@ -97,6 +80,10 @@ async function displayHairdressers() {
     });
   }
 }
+
+
+
+
 
 // Show appointment form
 function showAppointmentForm(hairdresser: Hairdresser) {
