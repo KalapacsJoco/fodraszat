@@ -33,13 +33,16 @@ async function displayHairdressers() {
                 .join("");
             const hairdresserElement = `
                 <div class="hairdresser">
+                <div>
                     <h3>${hairdresser.name}</h3>
-                    <img src="/assets/images/${hairdresser.id}.jpg" alt="Kép leírása">
                     <p>${hairdresser.email}</p>
                     <p>${hairdresser.phone_number}</p>
                     <p>Munkaidő: ${hairdresser.work_start_time} - ${hairdresser.work_end_time}</p>
                     <ul>${servicesList}</ul> 
                     <button data-hairdresser-id="${hairdresser.id}">Időpontfoglalás</button>
+                    </div>
+                    <img src="/assets/images/${hairdresser.id}.jpg" alt="Kép leírása">
+
                 </div>
             `;
             hairdresserList.innerHTML += hairdresserElement;
