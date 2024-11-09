@@ -2,7 +2,8 @@ import { Hairdresser } from './models/Hairdresser';
 import { Appointment } from './models/Appointment';
 import { APPOINTMENTS_URL, HAIRDRESSERS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
-import { getAppointments} from './controllers/AppointmentController.js'
+import { checkIfBooked, getAppointments} from './controllers/AppointmentController.js'
+import { formatTime } from './components/FormatTime.js';
 
 // console.log(APPOINTMENTS_URL)
 
@@ -173,37 +174,6 @@ async function displayAvailableAppointments(
       appointmentTimes.appendChild(timeSlot);
     }
   }
-}
-
-// Check if a time slot is booked
-function checkIfBooked(
-  appointments: Appointment[],
-  hairdresserId: number,
-  date: string,
-  time: string
-): boolean {
-  return appointments.some((appointment) => {
-    const [appointmentDate, appointmentTime] =
-      appointment.appointment_date.split(" ");
-    return (
-      appointment.hairdresser_id === hairdresserId.toString() &&
-      appointmentDate === date &&
-      appointmentTime.substring(0, 5) === time
-    );
-  });
-}
-
-
-
-// Format time from minutes
-function formatTime(timeInMinutes: number): string {
-  const hours = Math.floor(timeInMinutes / 60);
-  const minutes = timeInMinutes % 60;
-
-  const hoursStr = hours < 10 ? "0" + hours : hours.toString();
-  const minutesStr = minutes < 10 ? "0" + minutes : minutes.toString();
-
-  return `${hoursStr}:${minutesStr}`;
 }
 
 

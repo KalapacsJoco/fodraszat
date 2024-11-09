@@ -11,6 +11,23 @@ export async function getAppointments(): Promise<Appointment[]> {
     }
   }
 
+  export function checkIfBooked(
+    appointments: Appointment[],
+    hairdresserId: number,
+    date: string,
+    time: string
+  ): boolean {
+    return appointments.some((appointment) => {
+      const [appointmentDate, appointmentTime] =
+        appointment.appointment_date.split(" ");
+      return (
+        appointment.hairdresser_id === hairdresserId.toString() &&
+        appointmentDate === date &&
+        appointmentTime.substring(0, 5) === time
+      );
+    });
+  }
+
 // export async function bookAppointment(appointment: Appointment) {
 //     try {
 //       const response = await fetch(APPOINTMENTS_URL, {

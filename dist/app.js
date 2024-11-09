@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
-import { getAppointments } from './controllers/AppointmentController.js';
+import { checkIfBooked, getAppointments } from './controllers/AppointmentController.js';
+import { formatTime } from './components/FormatTime.js';
 // console.log(APPOINTMENTS_URL)
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
@@ -138,23 +139,6 @@ function displayAvailableAppointments(hairdresser, date) {
             }
         }
     });
-}
-// Check if a time slot is booked
-function checkIfBooked(appointments, hairdresserId, date, time) {
-    return appointments.some((appointment) => {
-        const [appointmentDate, appointmentTime] = appointment.appointment_date.split(" ");
-        return (appointment.hairdresser_id === hairdresserId.toString() &&
-            appointmentDate === date &&
-            appointmentTime.substring(0, 5) === time);
-    });
-}
-// Format time from minutes
-function formatTime(timeInMinutes) {
-    const hours = Math.floor(timeInMinutes / 60);
-    const minutes = timeInMinutes % 60;
-    const hoursStr = hours < 10 ? "0" + hours : hours.toString();
-    const minutesStr = minutes < 10 ? "0" + minutes : minutes.toString();
-    return `${hoursStr}:${minutesStr}`;
 }
 // Book appointment
 appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 : appointmentSubmitButton.addEventListener("click", () => {
