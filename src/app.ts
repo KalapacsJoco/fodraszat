@@ -2,9 +2,9 @@ import { Hairdresser } from './models/Hairdresser';
 import { Appointment } from './models/Appointment';
 import { APPOINTMENTS_URL, HAIRDRESSERS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
-// import { HAIRDRESSERS_URL, APPOINTMENTS_URL } from './apiEndpoints';
+import { getAppointments} from './controllers/AppointmentController.js'
 
-console.log(APPOINTMENTS_URL)
+// console.log(APPOINTMENTS_URL)
 
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
@@ -27,18 +27,14 @@ const appointmentCloseButton = document.getElementById(
   "appointment-form-close-button"
 ) as HTMLButtonElement;
 
-// Variables to store selected appointment details
+// // Variables to store selected appointment details
 let selectedTimeSlot: string | null = null;
 let selectedHairdresser: Hairdresser | null = null;
 let selectedDate: string | null = null;
 let selectedService: string | null = null;
 
 
-// Fetch list of hairdressers
-// async function getHairdressers(): Promise<Hairdresser[]> {
-//   const response = await fetch(HAIRDRESSERS_URL);
-//   return await response.json();
-// }
+
 
 // Display list of hairdressers
 async function displayHairdressers() {
@@ -197,16 +193,7 @@ function checkIfBooked(
   });
 }
 
-// Fetch all appointments
-async function getAppointments(): Promise<Appointment[]> {
-  try {
-    const response = await fetch(APPOINTMENTS_URL);
-    return await response.json();
-  } catch (error) {
-    console.error("Hiba az időpontok lekérése során:", error);
-    return [];
-  }
-}
+
 
 // Format time from minutes
 function formatTime(timeInMinutes: number): string {

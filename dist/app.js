@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
-// import { HAIRDRESSERS_URL, APPOINTMENTS_URL } from './apiEndpoints';
-console.log(APPOINTMENTS_URL);
+import { getAppointments } from './controllers/AppointmentController.js';
+// console.log(APPOINTMENTS_URL)
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
 const appointmentForm = document.getElementById("appointment-form");
@@ -21,16 +21,11 @@ const appointmentNameInput = document.getElementById("appointment-name");
 const appointmentPhoneInput = document.getElementById("appointment-phone");
 const appointmentSubmitButton = document.getElementById("appointment-submit");
 const appointmentCloseButton = document.getElementById("appointment-form-close-button");
-// Variables to store selected appointment details
+// // Variables to store selected appointment details
 let selectedTimeSlot = null;
 let selectedHairdresser = null;
 let selectedDate = null;
 let selectedService = null;
-// Fetch list of hairdressers
-// async function getHairdressers(): Promise<Hairdresser[]> {
-//   const response = await fetch(HAIRDRESSERS_URL);
-//   return await response.json();
-// }
 // Display list of hairdressers
 function displayHairdressers() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -151,19 +146,6 @@ function checkIfBooked(appointments, hairdresserId, date, time) {
         return (appointment.hairdresser_id === hairdresserId.toString() &&
             appointmentDate === date &&
             appointmentTime.substring(0, 5) === time);
-    });
-}
-// Fetch all appointments
-function getAppointments() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch(APPOINTMENTS_URL);
-            return yield response.json();
-        }
-        catch (error) {
-            console.error("Hiba az időpontok lekérése során:", error);
-            return [];
-        }
     });
 }
 // Format time from minutes
