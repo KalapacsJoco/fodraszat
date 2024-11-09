@@ -68,7 +68,7 @@ h1 {
 }
 
 .hairdresser button {
-  background-color: rgb(104, 96, 90);
+  background-color: #01352c;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -79,7 +79,7 @@ h1 {
 }
 
 .hairdresser button:hover {
-  background-color: rgb(109, 79, 57);
+  background-color: #096c47;
 }
 
 #appointment-form {
@@ -175,7 +175,7 @@ h1 {
   height: 20px;
   top: 10px;
   left: calc(100% - 30px); /* A jobb széltől 30px-re */
-  background-color: lightcoral;
+  background-color: #dc3545;
   color: black; /* Sötétszürke szöveg */
   border: none;
   padding: 10px 10px;

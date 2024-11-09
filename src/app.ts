@@ -1,11 +1,10 @@
-import { Hairdresser } from './interfaces/Hairdresser';
-import { Appointment } from './interfaces/Appointment';
-// import { displayHairdressers, } from './interfaces/Appointment';
-// import { API_BASE_URL, HAIRDRESSERS_URL, APPOINTMENTS_URL } from './apiEndPoint';
+import { Hairdresser } from './models/Hairdresser';
+import { Appointment } from './models/Appointment';
+import { APPOINTMENTS_URL, HAIRDRESSERS_URL } from './apiConfig.js';
+import { getHairdressers } from './controllers/HairdresserController.js';
+// import { HAIRDRESSERS_URL, APPOINTMENTS_URL } from './apiEndpoints';
 
-const API_BASE_URL = "http://salonsapi.prooktatas.hu/api";
-const HAIRDRESSERS_URL = `${API_BASE_URL}/hairdressers`;
-const APPOINTMENTS_URL = `${API_BASE_URL}/appointments`;
+console.log(APPOINTMENTS_URL)
 
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
@@ -36,10 +35,10 @@ let selectedService: string | null = null;
 
 
 // Fetch list of hairdressers
-async function getHairdressers(): Promise<Hairdresser[]> {
-  const response = await fetch(HAIRDRESSERS_URL);
-  return await response.json();
-}
+// async function getHairdressers(): Promise<Hairdresser[]> {
+//   const response = await fetch(HAIRDRESSERS_URL);
+//   return await response.json();
+// }
 
 // Display list of hairdressers
 async function displayHairdressers() {
@@ -213,10 +212,13 @@ async function getAppointments(): Promise<Appointment[]> {
 function formatTime(timeInMinutes: number): string {
   const hours = Math.floor(timeInMinutes / 60);
   const minutes = timeInMinutes % 60;
-  return `${hours.toString().padStart(2, "0")}:${minutes
-    .toString()
-    .padStart(2, "0")}`;
+
+  const hoursStr = hours < 10 ? "0" + hours : hours.toString();
+  const minutesStr = minutes < 10 ? "0" + minutes : minutes.toString();
+
+  return `${hoursStr}:${minutesStr}`;
 }
+
 
 // Book appointment
 appointmentSubmitButton?.addEventListener("click", () => {
