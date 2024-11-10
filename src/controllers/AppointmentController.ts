@@ -1,5 +1,26 @@
 import { Appointment } from '../models/Appointment';
 import { APPOINTMENTS_URL } from '../apiConfig.js';
+import { Hairdresser } from '../models/Hairdresser';
+import { displayAvailableAppointments } from '../view/AppointmentView.js';
+
+const appointmentSubmitButton = document.getElementById(
+    "appointment-submit"
+  ) as HTMLButtonElement;
+  const appointmentNameInput = document.getElementById(
+    "appointment-name"
+  ) as HTMLInputElement;
+  const appointmentPhoneInput = document.getElementById(
+    "appointment-phone"
+  ) as HTMLInputElement;
+
+let selectedService: string | null = null;
+let selectedHairdresser: Hairdresser | null = null;
+let selectedDate: string | null = null;
+let selectedTimeSlot: string | null = null;
+
+
+
+
 
 export async function getAppointments(): Promise<Appointment[]> {
     try {
@@ -28,30 +49,42 @@ export async function getAppointments(): Promise<Appointment[]> {
     });
   }
 
-// export async function bookAppointment(appointment: Appointment) {
-//     try {
-//       const response = await fetch(APPOINTMENTS_URL, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(appointment),
-//       });
+  export function handleServiceSelection(checkbox: HTMLInputElement) {
+    const checkboxes = document.querySelectorAll(
+      'input[name="service"]'
+    ) as NodeListOf<HTMLInputElement>;
+    checkboxes.forEach((cb) => {
+      if (cb !== checkbox) cb.checked = false;
+    });
+    selectedService = checkbox.checked ? checkbox.value : null;
+  }
+
+
+
+export async function bookAppointment(appointment: Appointment) {
+    try {
+      const response = await fetch(APPOINTMENTS_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(appointment),
+      });
   
-//       if (response.ok) {
-//         console.log("Időpontfoglalás sikeres!");
-//         alert("Időpontfoglalás sikeres!");
-//         location.reload();
-//         if (selectedHairdresser && selectedDate) {
-//           displayAvailableAppointments(selectedHairdresser, selectedDate);
-//         }
-//       } else {
-//         console.error("Hiba történt az időpontfoglalás során!");
-//         alert("Hiba történt az időpontfoglalás során!");
-//       }
-//     } catch (error) {
-//       console.error("Hiba történt az időpontfoglalás során:", error);
-//       alert("Hiba történt az időpontfoglalás során!");
-//     }
-//   }
+      if (response.ok) {
+        console.log("Időpontfoglalás sikeres!");
+        alert("Időpontfoglalás sikeres!");
+        location.reload();
+        if (selectedHairdresser && selectedDate) {
+          displayAvailableAppointments(selectedHairdresser, selectedDate);
+        }
+      } else {
+        console.error("Hiba történt az időpontfoglalás során!");
+        alert("Hiba történt az időpontfoglalás során!");
+      }
+    } catch (error) {
+      console.error("Hiba történt az időpontfoglalás során:", error);
+      alert("Hiba történt az időpontfoglalás során!");
+    }
+  }
   

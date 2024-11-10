@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
-import { checkIfBooked, getAppointments } from './controllers/AppointmentController.js';
 import { formatTime } from './components/FormatTime.js';
+import { checkIfBooked, getAppointments } from './controllers/AppointmentController.js';
+// import { displayHairdressers } from './view/HairdressersView.js';
 // console.log(APPOINTMENTS_URL)
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
@@ -165,6 +166,27 @@ appointmentCloseButton.addEventListener("click", () => {
     if (appointmentForm) {
         appointmentForm.style.display = "none";
         location.reload();
+    }
+});
+appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 : appointmentSubmitButton.addEventListener("click", () => {
+    console.log(selectedHairdresser, selectedDate, selectedTimeSlot, selectedService, appointmentNameInput === null || appointmentNameInput === void 0 ? void 0 : appointmentNameInput.value, appointmentPhoneInput === null || appointmentPhoneInput === void 0 ? void 0 : appointmentPhoneInput.value);
+    if (selectedHairdresser &&
+        selectedDate &&
+        selectedTimeSlot &&
+        selectedService &&
+        (appointmentNameInput === null || appointmentNameInput === void 0 ? void 0 : appointmentNameInput.value) &&
+        (appointmentPhoneInput === null || appointmentPhoneInput === void 0 ? void 0 : appointmentPhoneInput.value)) {
+        const appointment = {
+            hairdresser_id: selectedHairdresser.id.toString(),
+            customer_name: appointmentNameInput.value,
+            customer_phone: appointmentPhoneInput.value,
+            appointment_date: `${selectedDate} ${selectedTimeSlot}`,
+            service: selectedService,
+        };
+        bookAppointment(appointment);
+    }
+    else {
+        alert("Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat.");
     }
 });
 // Book appointment function

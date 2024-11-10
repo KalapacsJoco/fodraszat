@@ -2,13 +2,15 @@ import { Hairdresser } from './models/Hairdresser';
 import { Appointment } from './models/Appointment';
 import { APPOINTMENTS_URL, HAIRDRESSERS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
-import { checkIfBooked, getAppointments} from './controllers/AppointmentController.js'
-import { formatTime } from './components/FormatTime.js';
+import { formatTime} from './components/FormatTime.js';
+import { checkIfBooked, getAppointments } from './controllers/AppointmentController.js';
+// import { displayHairdressers } from './view/HairdressersView.js';
 
 // console.log(APPOINTMENTS_URL)
 
 // HTML elements
 const hairdresserList = document.getElementById("hairdresser-list");
+
 const appointmentForm = document.getElementById("appointment-form");
 const appointmentDateInput = document.getElementById(
   "appointment-date"
@@ -209,6 +211,34 @@ appointmentCloseButton.addEventListener("click", () => {
   }
 });
 
+appointmentSubmitButton?.addEventListener("click", () => {
+  console.log(selectedHairdresser, selectedDate, selectedTimeSlot, selectedService, appointmentNameInput?.value, appointmentPhoneInput?.value)
+  if (
+    selectedHairdresser &&
+    selectedDate &&
+    selectedTimeSlot &&
+    selectedService &&
+    appointmentNameInput?.value &&
+    appointmentPhoneInput?.value
+  ) {
+    const appointment: Appointment = {
+      hairdresser_id: selectedHairdresser.id.toString(),
+      customer_name: appointmentNameInput.value,
+      customer_phone: appointmentPhoneInput.value,
+      appointment_date: `${selectedDate} ${selectedTimeSlot}`,
+      service: selectedService,
+    };
+
+   
+    bookAppointment(appointment);
+  } else {
+    
+    alert(
+      "Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat."
+    );
+  }
+});
+
 // Book appointment function
 async function bookAppointment(appointment: Appointment) {
   try {
@@ -236,6 +266,7 @@ async function bookAppointment(appointment: Appointment) {
     alert("Hiba történt az időpontfoglalás során!");
   }
 }
+  
 
 // Initialize
 displayHairdressers();
