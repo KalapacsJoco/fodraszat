@@ -1,41 +1,45 @@
 "use strict";
-// import { getHairdressers } from "../controllers/HairdresserController.js";
-// export async function displayHairdressers() {
-//   if (hairdresserList) {
-//     const hairdressers = await getHairdressers();
-//     hairdressers.forEach((hairdresser) => {
-//       const servicesList = hairdresser.services
-//         .map((service) => `<li>${service}</li>`)
-//         .join("");
-//       const hairdresserElement = `
-//                 <div class="hairdresser">
-//                 <div>
-//                     <h3>${hairdresser.name}</h3>
-//                     <p>${hairdresser.email}</p>
-//                     <p>${hairdresser.phone_number}</p>
-//                     <p>Munkaidő: ${hairdresser.work_start_time} - ${hairdresser.work_end_time}</p>
-//                     <ul>${servicesList}</ul> 
-//                     <button data-hairdresser-id="${hairdresser.id}">Időpontfoglalás</button>
-//                     </div>
-//                     <img src="/assets/images/${hairdresser.id}.jpg" alt="Kép leírása">
-//                 </div>
-//             `;
-//       hairdresserList.innerHTML += hairdresserElement;
-//     });
-//     // Appointment button event handler
-//     // const appointmentButtons = document.querySelectorAll(".hairdresser button");
-//     // appointmentButtons.forEach((button) => {
-//     //   const buttonElement = button as HTMLElement;
-//     //   buttonElement.addEventListener("click", () => {
-//     //     const hairdresserId = buttonElement.dataset.hairdresserId;
-//     //     if (hairdresserId) {
-//     //       selectedHairdresser =
-//     //         hairdressers.find((h) => h.id === parseInt(hairdresserId)) || null;
-//     //       if (selectedHairdresser) {
-//     //         showAppointmentForm(selectedHairdresser);
-//     //       }
-//     //     }
-//     //   });
-//     // });
+// import { formatTime } from "../components/FormatTime.js";
+// import { checkIfBooked, getAppointments } from "../controllers/AppointmentController.js";
+// import { Hairdresser } from "../models/Hairdresser.js";
+// const appointmentTimes = document.getElementById("appointment-times");
+// let selectedDate: string | null = null;
+// let selectedTimeSlot: string | null = null;
+// export async function displayAvailableAppointments(
+//     hairdresser: Hairdresser,
+//     date: string
+//   ) {
+//     if (appointmentTimes) {
+//       appointmentTimes.innerHTML = "";
+//       selectedDate = date;
+//       const startTime = parseInt(hairdresser.work_start_time.split(":")[0]) * 60;
+//       const endTime = parseInt(hairdresser.work_end_time.split(":")[0]) * 60;
+//       const appointments = await getAppointments();
+//       for (let time = startTime; time < endTime; time += 30) {
+//         const timeSlot = document.createElement("div");
+//         timeSlot.classList.add("time-slot");
+//         const formattedTime = formatTime(time);
+//         timeSlot.textContent = formattedTime;
+//         const isBooked = checkIfBooked(
+//           appointments,
+//           hairdresser.id,
+//           date,
+//           formattedTime
+//         );
+//         if (isBooked) {
+//           timeSlot.classList.add("booked");
+//         } else {
+//           timeSlot.addEventListener("click", () => {
+//             const previouslySelected = document.querySelector(
+//               ".time-slot.selected"
+//             );
+//             if (previouslySelected)
+//               previouslySelected.classList.remove("selected");
+//             timeSlot.classList.add("selected");
+//             selectedTimeSlot = formattedTime;
+//           });
+//         }
+//         appointmentTimes.appendChild(timeSlot);
+//       }
+//     }
 //   }
-// }

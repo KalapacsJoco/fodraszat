@@ -1,58 +1,39 @@
-import { Hairdresser } from "../models/Hairdresser";
-import { checkIfBooked, getAppointments} from '../controllers/AppointmentController.js'
-import { formatTime } from '../components/FormatTime.js';
+// import { Hairdresser } from "../models/Hairdresser";
+
+// const appointmentForm = document.getElementById("appointment-form");
 
 
+// function showAppointmentForm(hairdresser: Hairdresser) {
+//   if (appointmentForm) {
+//     appointmentForm.style.display = "block";
+//     selectedHairdresser = hairdresser;
 
-const appointmentTimes = document.getElementById("appointment-times");
+//     // Generate service checkboxes
+//     if (appointmentServices) {
+//       // appointmentServices.innerHTML = '<h4>Szolgáltatások:</h4>';
+//       hairdresser.services.forEach((service) => {
+//         const checkbox = document.createElement("input");
+//         checkbox.type = "checkbox";
+//         checkbox.name = "service";
+//         checkbox.value = service;
+//         checkbox.addEventListener("change", () =>
+//           handleServiceSelection(checkbox)
+//         );
 
-let selectedDate: string | null = null;
-let selectedTimeSlot: string | null = null;
+//         const label = document.createElement("label");
+//         label.textContent = service;
 
+//         appointmentServices.appendChild(checkbox);
+//         appointmentServices.appendChild(label);
+//         appointmentServices.appendChild(document.createElement("br"));
+//       });
+//     }
+//   }
 
-
-
-export async function displayAvailableAppointments(
-    hairdresser: Hairdresser,
-    date: string
-  ) {
-    if (appointmentTimes) {
-      appointmentTimes.innerHTML = "";
-      selectedDate = date;
-  
-      const startTime = parseInt(hairdresser.work_start_time.split(":")[0]) * 60;
-      const endTime = parseInt(hairdresser.work_end_time.split(":")[0]) * 60;
-      const appointments = await getAppointments();
-  
-      for (let time = startTime; time < endTime; time += 30) {
-        const timeSlot = document.createElement("div");
-        timeSlot.classList.add("time-slot");
-        const formattedTime = formatTime(time);
-        timeSlot.textContent = formattedTime;
-  
-        const isBooked = checkIfBooked(
-          appointments,
-          hairdresser.id,
-          date,
-          formattedTime
-        );
-  
-        if (isBooked) {
-          timeSlot.classList.add("booked");
-        } else {
-          timeSlot.addEventListener("click", () => {
-            const previouslySelected = document.querySelector(
-              ".time-slot.selected"
-            );
-            if (previouslySelected)
-              previouslySelected.classList.remove("selected");
-            timeSlot.classList.add("selected");
-            selectedTimeSlot = formattedTime;
-          });
-        }
-  
-        appointmentTimes.appendChild(timeSlot);
-      }
-    }
-  }
-  
+//   if (appointmentDateInput) {
+//     appointmentDateInput.addEventListener("change", () => {
+//       selectedDate = appointmentDateInput.value;
+//       displayAvailableAppointments(hairdresser, appointmentDateInput.value);
+//     });
+//   }
+// }

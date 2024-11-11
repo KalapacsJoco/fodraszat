@@ -1,3 +1,6 @@
+body {
+background-color: #2f3d4c;}
+
 #calendar-container {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -23,8 +26,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: rgba(151, 159, 165, 0.75);
+    /* border: 1px solid #ddd; */
     cursor: pointer;
     font-size: 1.2em;
 }
@@ -76,11 +79,11 @@
 }
 
 .work-day-hard {
-    background-color: #dc3545;
+    background-color: #761a1a
 
 }
 .work-day-soft {
-    background-color: yellow;
+    background-color: #ffa323
 
 }
 
