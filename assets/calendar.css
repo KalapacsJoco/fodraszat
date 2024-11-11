@@ -1,12 +1,22 @@
 #calendar-container {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    gap: 2px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+    gap: 1px;
+    width: 50%;
+    height: 350px;
+    margin: 20px auto;
+}
+
+.calendar-header {
+    display: contents; /* Keeps the headers in the grid row */
+    font-weight: bold;
+    text-align: center;
+}
+
+.calendar-day-header {
     padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
 }
 
 .calendar-day {
@@ -26,4 +36,55 @@
 .calendar-day.active {
     background-color: #d3f8d3; /* Highlight today */
     font-weight: bold;
+}
+
+/* Modal overlay */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    margin-top: -10px;
+    margin-right: -10px;
+    color: #333;
+}
+
+.close:hover {
+    color: red;
+}
+
+.work-day-hard {
+    background-color: #dc3545;
+
+}
+.work-day-soft {
+    background-color: yellow;
+
+}
+
+.free-day {
+    background: #01352c;
+
 }
