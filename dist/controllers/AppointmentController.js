@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { APPOINTMENTS_URL } from '../apiConfig.js';
-import { displayAvailableAppointments } from '../view/AppointmentView.js';
+// import { displayAvailableAppointments } from '../view/AppointmentView.js';
 const appointmentSubmitButton = document.getElementById("appointment-submit");
 const appointmentNameInput = document.getElementById("appointment-name");
 const appointmentPhoneInput = document.getElementById("appointment-phone");
@@ -44,32 +44,28 @@ export function handleServiceSelection(checkbox) {
     });
     selectedService = checkbox.checked ? checkbox.value : null;
 }
-export function bookAppointment(appointment) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch(APPOINTMENTS_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(appointment),
-            });
-            if (response.ok) {
-                console.log("Időpontfoglalás sikeres!");
-                alert("Időpontfoglalás sikeres!");
-                location.reload();
-                if (selectedHairdresser && selectedDate) {
-                    displayAvailableAppointments(selectedHairdresser, selectedDate);
-                }
-            }
-            else {
-                console.error("Hiba történt az időpontfoglalás során!");
-                alert("Hiba történt az időpontfoglalás során!");
-            }
-        }
-        catch (error) {
-            console.error("Hiba történt az időpontfoglalás során:", error);
-            alert("Hiba történt az időpontfoglalás során!");
-        }
-    });
-}
+// export async function bookAppointment(appointment: Appointment) {
+//     try {
+//       const response = await fetch(APPOINTMENTS_URL, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(appointment),
+//       });
+//       if (response.ok) {
+//         console.log("Időpontfoglalás sikeres!");
+//         alert("Időpontfoglalás sikeres!");
+//         location.reload();
+//         if (selectedHairdresser && selectedDate) {
+//           displayAvailableAppointments(selectedHairdresser, selectedDate);
+//         }
+//       } else {
+//         console.error("Hiba történt az időpontfoglalás során!");
+//         alert("Hiba történt az időpontfoglalás során!");
+//       }
+//     } catch (error) {
+//       console.error("Hiba történt az időpontfoglalás során:", error);
+//       alert("Hiba történt az időpontfoglalás során!");
+//     }
+//   }

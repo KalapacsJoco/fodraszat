@@ -9,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { getHairdressers } from './controllers/HairdresserController.js';
 import { APPOINTMENTS_URL } from './apiConfig.js';
+import { getAppointments, checkIfBooked } from './controllers/AppointmentController.js';
+import { formatTime } from './components/FormatTime.js';
 const calendarContainer = document.getElementById("calendar-container");
 const hairdresserSelect = document.getElementById("hairdresser-select");
 const today = new Date();
@@ -100,13 +102,55 @@ function updateCalendar(appointments) {
                 dayDiv.title = "Nincs foglalás";
             }
             // Show modal with appointment info on click
-            dayDiv.addEventListener("click", () => {
-                modalTitle.textContent = `${dayNumber}`;
-                modalInfo.textContent = dayAppointments.length > 0
-                    ? `Foglalások: ${dayAppointments.length}`
-                    : "Nincs foglalás";
-                modal.style.display = "flex"; // Show the modal
-            });
+            dayDiv.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+                const hairdresserId = parseInt(hairdresserSelect.value, 10); // Kiválasztott fodrász ID-ja
+                modalTitle.textContent = `${dayNumber}. nap foglalásai`;
+                // Fodrász adatainak lekérése
+                const hairdressers = yield getHairdressers();
+                const hairdresser = hairdressers.find(h => h.id === hairdresserId);
+                if (hairdresser) {
+                    // Munkaidő beállítása a fodrász adatai alapján
+                    const workStart = parseInt(hairdresser.work_start_time.split(':')[0]) * 60; // Percben
+                    const workEnd = parseInt(hairdresser.work_end_time.split(':')[0]) * 60; // Percben
+                    // Összes időpont lekérdezése, majd szűrés az adott fodrászra és napra
+                    const appointments = yield getAppointments();
+                    const filteredAppointments = appointments.filter(appointment => appointment.hairdresser_id === hairdresserId.toString() &&
+                        appointment.appointment_date.startsWith(`${today.getFullYear()}-${month}-${day}`));
+                    const appointmentGrid = document.getElementById("modal-appointment-grid");
+                    if (appointmentGrid) {
+                        appointmentGrid.innerHTML = ""; // Korábbi időpontok törlése
+                    }
+                    // Munkaidő: reggel 8:00-tól este 19:00-ig, félórás blokkokban
+                    // const workStart = 8 * 60; // Percben reggel 8:00
+                    // const workEnd = 19 * 60; // Percben este 19:00
+                    for (let time = workStart; time < workEnd; time += 30) {
+                        const timeSlot = document.createElement("div");
+                        timeSlot.classList.add("time-slot");
+                        const formattedTime = formatTime(time);
+                        timeSlot.textContent = formattedTime;
+                        // Ellenőrzés, hogy a félórás időpont foglalt-e
+                        const isBooked = checkIfBooked(filteredAppointments, hairdresserId, `${today.getFullYear()}-${month}-${day}`, formattedTime);
+                        if (isBooked) {
+                            const appointmentDetails = filteredAppointments.find(appointment => appointment.appointment_date.includes(formattedTime) // Keresés a teljes dátum stringben
+                            );
+                            timeSlot.classList.add("booked");
+                            // Felhasználó nevének és telefonszámának megjelenítése
+                            timeSlot.innerHTML = `
+                        <strong>${formattedTime}</strong><br>
+                        ${appointmentDetails === null || appointmentDetails === void 0 ? void 0 : appointmentDetails.customer_name}<br>
+                        ${appointmentDetails === null || appointmentDetails === void 0 ? void 0 : appointmentDetails.customer_phone}
+                      `;
+                        }
+                        if (appointmentGrid) {
+                            appointmentGrid.appendChild(timeSlot);
+                        }
+                    }
+                    modal.style.display = "flex"; // Megjelenítjük a modalt
+                }
+                else {
+                    console.error('Nem található fodrász az adott ID-val.');
+                }
+            }));
         }
         calendarContainer.appendChild(dayDiv);
     }
