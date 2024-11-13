@@ -1,9 +1,8 @@
 import { Hairdresser } from './models/Hairdresser';
 import { Appointment } from './models/Appointment';
-import { APPOINTMENTS_URL, HAIRDRESSERS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
 import { formatTime} from './components/FormatTime.js';
-import { checkIfBooked, getAppointments } from './controllers/AppointmentController.js';
+import { bookAppointment, checkIfBooked, getAppointments,} from './controllers/AppointmentController.js';
 // import { displayHairdressers } from './view/HairdressersView.js';
 
 // console.log(APPOINTMENTS_URL)
@@ -35,9 +34,6 @@ let selectedTimeSlot: string | null = null;
 let selectedHairdresser: Hairdresser | null = null;
 let selectedDate: string | null = null;
 let selectedService: string | null = null;
-
-
-
 
 // Display list of hairdressers
 async function displayHairdressers() {
@@ -82,10 +78,6 @@ async function displayHairdressers() {
   }
 }
 
-
-
-
-
 // Show appointment form
 function showAppointmentForm(hairdresser: Hairdresser) {
   if (appointmentForm) {
@@ -120,17 +112,6 @@ function showAppointmentForm(hairdresser: Hairdresser) {
       displayAvailableAppointments(hairdresser, appointmentDateInput.value);
     });
   }
-}
-
-// Handle service selection (only allow one checkbox to be selected at a time)
-function handleServiceSelection(checkbox: HTMLInputElement) {
-  const checkboxes = document.querySelectorAll(
-    'input[name="service"]'
-  ) as NodeListOf<HTMLInputElement>;
-  checkboxes.forEach((cb) => {
-    if (cb !== checkbox) cb.checked = false;
-  });
-  selectedService = checkbox.checked ? checkbox.value : null;
 }
 
 // Display available appointments
@@ -188,8 +169,12 @@ appointmentCloseButton.addEventListener("click", () => {
   }
 });
 
+// import { bookAppointment } from './bookAppointment';
+// import { displayAvailableAppointments } from './view/HairdressersView';
+
 appointmentSubmitButton?.addEventListener("click", () => {
-  console.log(selectedHairdresser, selectedDate, selectedTimeSlot, selectedService, appointmentNameInput?.value, appointmentPhoneInput?.value)
+  console.log(selectedHairdresser, selectedDate, selectedTimeSlot, selectedService, appointmentNameInput?.value, appointmentPhoneInput?.value);
+  
   if (
     selectedHairdresser &&
     selectedDate &&
@@ -206,43 +191,28 @@ appointmentSubmitButton?.addEventListener("click", () => {
       service: selectedService,
     };
 
-   
-    bookAppointment(appointment);
+    // `displayAvailableAppointments` meghívása callback-ként
+    bookAppointment(appointment, () => {
+      displayAvailableAppointments(selectedHairdresser!, selectedDate!);
+    });
   } else {
-    
     alert(
       "Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat."
     );
   }
 });
 
-// Book appointment function
-async function bookAppointment(appointment: Appointment) {
-  try {
-    const response = await fetch(APPOINTMENTS_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(appointment),
-    });
-
-    if (response.ok) {
-      console.log("Időpontfoglalás sikeres!");
-      alert("Időpontfoglalás sikeres!");
-      location.reload();
-      if (selectedHairdresser && selectedDate) {
-        displayAvailableAppointments(selectedHairdresser, selectedDate);
-      }
-    } else {
-      console.error("Hiba történt az időpontfoglalás során!");
-      alert("Hiba történt az időpontfoglalás során!");
-    }
-  } catch (error) {
-    console.error("Hiba történt az időpontfoglalás során:", error);
-    alert("Hiba történt az időpontfoglalás során!");
-  }
+function handleServiceSelection(checkbox: HTMLInputElement) {
+  const checkboxes = document.querySelectorAll(
+    'input[name="service"]'
+  ) as NodeListOf<HTMLInputElement>;
+  checkboxes.forEach((cb) => {
+    if (cb !== checkbox) cb.checked = false;
+  });
+  selectedService = checkbox.checked ? checkbox.value : null;
 }
+
+
   
 
 // Initialize

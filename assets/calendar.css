@@ -1,45 +1,11 @@
 body {
 background-color: #2f3d4c;}
 
-#calendar-container {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 1px;
-    width: 50%;
-    height: 350px;
-    margin: 20px auto;
-}
 
-.calendar-header {
-    display: contents; /* Keeps the headers in the grid row */
-    font-weight: bold;
-    text-align: center;
-}
 
-.calendar-day-header {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-}
 
-.calendar-day {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(151, 159, 165, 0.75);
-    /* border: 1px solid #ddd; */
-    cursor: pointer;
-    font-size: 1.2em;
-}
 
-.calendar-day:hover {
-    background-color: #e0e0e0;
-}
 
-.calendar-day.active {
-    background-color: #d3f8d3; /* Highlight today */
-    font-weight: bold;
-}
 
 /* Modal overlay */
 /* Modal overlay */
@@ -74,15 +40,6 @@ background-color: #2f3d4c;}
     color: #333;
 }
 
-.appointment-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Két oszlopos rács */
-    gap: 3px;
-    margin-top: 15px;
-    text-align: center;
-    /* overflow: scroll; */
-    height: 350px;
-}
 
 .time-slot {
     color: lightgray;
@@ -107,30 +64,10 @@ background-color: #2f3d4c;}
     color: red;
 }
 
-.work-day-hard {
-    background-color: #35011f
-
-}
-.work-day-soft {
-    background-color: #352501
-
-}
-
-.free-day {
-    background: #01352c;
-
-}
-
-
-
-body {
-  background-color: #2f3d4c;
-}
-
 #calendar-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px; /* Növelt térköz a napok között */
+  gap: 3px; /* Növelt térköz a napok között */
   width: 80%; /* Szélesebb naptár */
   margin: 20px auto;
   border-radius: 10px; /* Lekerekített sarkok */
@@ -152,17 +89,20 @@ body {
 }
 
 .calendar-day {
+  position: relative; /* Pozícionálás a gyerek elemekhez */
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgba(151, 159, 165, 0.75);
-  border: none;
   cursor: pointer;
   font-size: 1.3em;
   padding: 20px;
-  transition: background-color 0.3s, color 0.3s; /* Áttűnés a hover effektushoz */
-  border-radius: 5px; /* Lekerekített sarkok */
-}
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
+  }
+  
+
+  
 
 .calendar-day:hover {
   background-color: rgba(151, 159, 165, 1); /* Sötétebb háttérszín hover-kor */
@@ -174,12 +114,6 @@ body {
   color: #333; /* Sötét szöveg */
   font-weight: bold;
 }
-
-/* ... (Modal overlay - változatlan) */
-
-
-
-/* ... (close gomb - változatlan) */
 
 .appointment-grid {
   display: grid;
@@ -207,3 +141,11 @@ body {
   background-color: #5cb85c; /* Világos zöld */
   color: white;
 }
+
+.day-number {
+  position: absolute; /* Fix pozíció a szülőhöz képest */
+  top: 5px;
+  right: 5px;
+  color: red;
+  font-size: 0.8em;
+  }

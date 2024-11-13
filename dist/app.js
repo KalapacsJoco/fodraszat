@@ -7,10 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getHairdressers } from './controllers/HairdresserController.js';
 import { formatTime } from './components/FormatTime.js';
-import { checkIfBooked, getAppointments } from './controllers/AppointmentController.js';
+import { bookAppointment, checkIfBooked, getAppointments, } from './controllers/AppointmentController.js';
 // import { displayHairdressers } from './view/HairdressersView.js';
 // console.log(APPOINTMENTS_URL)
 // HTML elements
@@ -100,15 +99,6 @@ function showAppointmentForm(hairdresser) {
         });
     }
 }
-// Handle service selection (only allow one checkbox to be selected at a time)
-function handleServiceSelection(checkbox) {
-    const checkboxes = document.querySelectorAll('input[name="service"]');
-    checkboxes.forEach((cb) => {
-        if (cb !== checkbox)
-            cb.checked = false;
-    });
-    selectedService = checkbox.checked ? checkbox.value : null;
-}
 // Display available appointments
 function displayAvailableAppointments(hairdresser, date) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -147,6 +137,8 @@ appointmentCloseButton.addEventListener("click", () => {
         location.reload();
     }
 });
+// import { bookAppointment } from './bookAppointment';
+// import { displayAvailableAppointments } from './view/HairdressersView';
 appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 : appointmentSubmitButton.addEventListener("click", () => {
     console.log(selectedHairdresser, selectedDate, selectedTimeSlot, selectedService, appointmentNameInput === null || appointmentNameInput === void 0 ? void 0 : appointmentNameInput.value, appointmentPhoneInput === null || appointmentPhoneInput === void 0 ? void 0 : appointmentPhoneInput.value);
     if (selectedHairdresser &&
@@ -162,41 +154,22 @@ appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 
             appointment_date: `${selectedDate} ${selectedTimeSlot}`,
             service: selectedService,
         };
-        bookAppointment(appointment);
+        // `displayAvailableAppointments` meghívása callback-ként
+        bookAppointment(appointment, () => {
+            displayAvailableAppointments(selectedHairdresser, selectedDate);
+        });
     }
     else {
         alert("Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat.");
     }
 });
-// Book appointment function
-function bookAppointment(appointment) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch(APPOINTMENTS_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(appointment),
-            });
-            if (response.ok) {
-                console.log("Időpontfoglalás sikeres!");
-                alert("Időpontfoglalás sikeres!");
-                location.reload();
-                if (selectedHairdresser && selectedDate) {
-                    displayAvailableAppointments(selectedHairdresser, selectedDate);
-                }
-            }
-            else {
-                console.error("Hiba történt az időpontfoglalás során!");
-                alert("Hiba történt az időpontfoglalás során!");
-            }
-        }
-        catch (error) {
-            console.error("Hiba történt az időpontfoglalás során:", error);
-            alert("Hiba történt az időpontfoglalás során!");
-        }
+function handleServiceSelection(checkbox) {
+    const checkboxes = document.querySelectorAll('input[name="service"]');
+    checkboxes.forEach((cb) => {
+        if (cb !== checkbox)
+            cb.checked = false;
     });
+    selectedService = checkbox.checked ? checkbox.value : null;
 }
 // Initialize
 displayHairdressers();

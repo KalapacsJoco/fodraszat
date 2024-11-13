@@ -14,10 +14,6 @@ import { APPOINTMENTS_URL } from '../apiConfig.js';
 //   ) as HTMLButtonElement;
 const appointmentNameInput = document.getElementById("appointment-name");
 const appointmentPhoneInput = document.getElementById("appointment-phone");
-let selectedService = null;
-let selectedHairdresser = null;
-let selectedDate = null;
-let selectedTimeSlot = null;
 export function getAppointments() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -38,36 +34,34 @@ export function checkIfBooked(appointments, hairdresserId, date, time) {
             appointmentTime.substring(0, 5) === time);
     });
 }
-export function handleServiceSelection(checkbox) {
-    const checkboxes = document.querySelectorAll('input[name="service"]');
-    checkboxes.forEach((cb) => {
-        if (cb !== checkbox)
-            cb.checked = false;
+// Modified bookAppointment function with an optional callback
+export function bookAppointment(appointment, onSuccess) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const response = yield fetch(APPOINTMENTS_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(appointment),
+            });
+            if (response.ok) {
+                console.log("Időpontfoglalás sikeres!");
+                alert("Időpontfoglalás sikeres!");
+                location.reload();
+                // Call the onSuccess callback if provided
+                if (onSuccess) {
+                    onSuccess();
+                }
+            }
+            else {
+                console.error("Hiba történt az időpontfoglalás során!");
+                alert("Hiba történt az időpontfoglalás során!");
+            }
+        }
+        catch (error) {
+            console.error("Hiba történt az időpontfoglalás során:", error);
+            alert("Hiba történt az időpontfoglalás során!");
+        }
     });
-    selectedService = checkbox.checked ? checkbox.value : null;
 }
-// export async function bookAppointment(appointment: Appointment) {
-//     try {
-//       const response = await fetch(APPOINTMENTS_URL, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(appointment),
-//       });
-//       if (response.ok) {
-//         console.log("Időpontfoglalás sikeres!");
-//         alert("Időpontfoglalás sikeres!");
-//         location.reload();
-//         if (selectedHairdresser && selectedDate) {
-//           displayAvailableAppointments(selectedHairdresser, selectedDate);
-//         }
-//       } else {
-//         console.error("Hiba történt az időpontfoglalás során!");
-//         alert("Hiba történt az időpontfoglalás során!");
-//       }
-//     } catch (error) {
-//       console.error("Hiba történt az időpontfoglalás során:", error);
-//       alert("Hiba történt az időpontfoglalás során!");
-//     }
-//   }

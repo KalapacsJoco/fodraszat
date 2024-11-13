@@ -3,12 +3,7 @@ import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getAppointments, checkIfBooked } from './controllers/AppointmentController.js';
 import { formatTime } from './components/FormatTime.js';
 
-interface Hairdresser {
-    id: number;
-    name: string;
-}
-
-interface Appointment {
+type Appointment = {
     hairdresser_id: string;
     appointment_date: string;
 }
@@ -66,7 +61,7 @@ function updateCalendar(appointments: Appointment[]) {
     calendarContainer.innerHTML = ""; // Clear the previous calendar
 
     // Create the header row for the days of the week
-    const daysOfWeek = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
+    const daysOfWeek: string[] = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
     const headerRow = document.createElement("div");
     headerRow.classList.add("calendar-header");
 
@@ -92,52 +87,60 @@ function updateCalendar(appointments: Appointment[]) {
         const dayNumber = i >= startDay && i < startDay + daysInMonth ? i - startDay + 1 : null;
 
         if (dayNumber) {
-            dayDiv.textContent = dayNumber.toString();
+            // Create the `mittom` element, which contains the day number
+            const mittom = document.createElement("div");
+            mittom.textContent = dayNumber.toString();
+            mittom.classList.add("day-number"); // Optional styling class
+            dayDiv.appendChild(mittom); // Add the day number div to the dayDiv
 
             // Format month and day with zero padding
             const month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1).toString();
             const day = dayNumber < 10 ? '0' + dayNumber : dayNumber.toString();
             const dayDate = `${today.getFullYear()}-${month}-${day}`;
 
-            // Az összes időpont szűrése a nap alapján
+            // Filter appointments by the day
             const dayAppointments = appointments.filter(appointment => {
               const [appointmentDate] = appointment.appointment_date.split(' ');
               return appointmentDate === dayDate;
             });
 
-            // Apply color based on whether appointments exist for the day
+            // Display the number of appointments without replacing the day number
+            const appointmentsInfo = document.createElement("div");
+            appointmentsInfo.classList.add("appointments-info"); // Additional class for styling
+
+            // Apply color and show appointment count
             if (dayAppointments.length > 0) {
                 if (dayAppointments.length >= 1 && dayAppointments.length <= 8) {
                     dayDiv.classList.add("work-day-soft");
-                    dayDiv.innerHTML = `Foglalások: ${dayAppointments.length}`;
                 } else if (dayAppointments.length >= 9 && dayAppointments.length <= 17) {
                     dayDiv.classList.add("work-day-hard");
-                    dayDiv.innerHTML = `Foglalások: ${dayAppointments.length}`;
                 } else {
                     dayDiv.classList.add("work-day");
-                    dayDiv.innerHTML = `Foglalások: ${dayAppointments.length}`;
                 }
+                appointmentsInfo.textContent = `Foglalások: ${dayAppointments.length}`;
             } else {
                 dayDiv.classList.add("free-day");
                 dayDiv.title = "Nincs foglalás";
             }
 
-            // Show modal with appointment info on click
+            // Append the appointment information div to the dayDiv
+            dayDiv.appendChild(appointmentsInfo);
 
+            // Show modal with appointment info on click
             dayDiv.addEventListener("click", async () => {
-                const hairdresserId = parseInt(hairdresserSelect.value, 10); // Kiválasztott fodrász ID-ja
+                const hairdresserId = parseInt(hairdresserSelect.value, 10); // Selected hairdresser ID
                 modalTitle.textContent = `${dayNumber}. nap foglalásai`;
 
-                // Fodrász adatainak lekérése
+                // Retrieve hairdresser details
                 const hairdressers = await getHairdressers();
                 const hairdresser = hairdressers.find(h => h.id === hairdresserId);
 
                 if (hairdresser) {
-                  // Munkaidő beállítása a fodrász adatai alapján
-                  const workStart = parseInt(hairdresser.work_start_time.split(':')[0]) * 60; // Percben
-                  const workEnd = parseInt(hairdresser.work_end_time.split(':')[0]) * 60; // Percben
+                  // Set working hours from hairdresser's data
+                  const workStart = parseInt(hairdresser.work_start_time.split(':')[0]) * 60;
+                  const workEnd = parseInt(hairdresser.work_end_time.split(':')[0]) * 60;
 
-                  // Összes időpont lekérdezése, majd szűrés az adott fodrászra és napra
+                  // Get all appointments, filtered by the selected hairdresser and day
                   const appointments = await getAppointments();
                   const filteredAppointments = appointments.filter(appointment =>
                     appointment.hairdresser_id === hairdresserId.toString() &&
@@ -146,7 +149,7 @@ function updateCalendar(appointments: Appointment[]) {
 
                   const appointmentGrid = document.getElementById("modal-appointment-grid");
                   if (appointmentGrid) {
-                    appointmentGrid.innerHTML = ""; // Korábbi időpontok törlése
+                    appointmentGrid.innerHTML = ""; // Clear previous appointments
                   }
 
                   for (let time = workStart; time < workEnd; time += 30) {
@@ -156,15 +159,15 @@ function updateCalendar(appointments: Appointment[]) {
                     const formattedTime = formatTime(time);
                     timeSlot.textContent = formattedTime;
 
-                    // Ellenőrzés, hogy a félórás időpont foglalt-e
+                    // Check if this half-hour slot is booked
                     const isBooked = checkIfBooked(filteredAppointments, hairdresserId, `${today.getFullYear()}-${month}-${day}`, formattedTime);
 
                     if (isBooked) {
                       const appointmentDetails = filteredAppointments.find(appointment =>
-                        appointment.appointment_date.includes(formattedTime) // Keresés a teljes dátum stringben
+                        appointment.appointment_date.includes(formattedTime)
                       );
                       timeSlot.classList.add("booked");
-                      // Felhasználó nevének és telefonszámának megjelenítése
+                      // Display customer's name and phone number
                       timeSlot.innerHTML = `
                         <strong>${formattedTime}</strong><br>
                         ${appointmentDetails?.customer_name}<br>
@@ -176,20 +179,26 @@ function updateCalendar(appointments: Appointment[]) {
                     }
                   }
 
-                  modal.style.display = "flex"; // Megjelenítjük a modalt
+                  modal.style.display = "flex"; // Display the modal
                 } else {
-                  console.error('Nem található fodrász az adott ID-val.');
+                  console.error('No hairdresser found with the given ID.');
                 }
             });
-
         }
 
+        // Append dayDiv to the calendar container
         calendarContainer.appendChild(dayDiv);
     }
-}// Close modal when clicking on the "close" button
+}
+
+// Close modal when clicking on the "close" button
 closeModalButton.addEventListener("click", () => {
     modal.style.display = "none"; // Hide the modal
 });
+// // Close modal when clicking on the "close" button
+// closeModalButton.addEventListener("click", () => {
+//     modal.style.display = "none"; // Hide the modal
+// });
 
 // Event listener for hairdresser selection
 hairdresserSelect.addEventListener("change", () => {
