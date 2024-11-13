@@ -159,7 +159,7 @@ h1 {
 }
 
 .time-slot.booked {
-  background-color: #dc3545;
+  background-color: #c81912;
   color: white;
   cursor: not-allowed;
 }
@@ -175,7 +175,7 @@ h1 {
   height: 20px;
   top: 10px;
   left: calc(100% - 30px); /* A jobb széltől 30px-re */
-  background-color: #dc3545;
+  background-color: #c81912;
   color: black; /* Sötétszürke szöveg */
   border: none;
   padding: 10px 10px;

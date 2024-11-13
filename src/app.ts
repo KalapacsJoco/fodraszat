@@ -179,30 +179,7 @@ async function displayAvailableAppointments(
 }
 
 
-// Book appointment
-appointmentSubmitButton?.addEventListener("click", () => {
-  if (
-    selectedHairdresser &&
-    selectedDate &&
-    selectedTimeSlot &&
-    selectedService &&
-    appointmentNameInput?.value &&
-    appointmentPhoneInput?.value
-  ) {
-    const appointment: Appointment = {
-      hairdresser_id: selectedHairdresser.id.toString(),
-      customer_name: appointmentNameInput.value,
-      customer_phone: appointmentPhoneInput.value,
-      appointment_date: `${selectedDate} ${selectedTimeSlot}`,
-      service: selectedService,
-    };
-    bookAppointment(appointment);
-  } else {
-    alert(
-      "Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat."
-    );
-  }
-});
+
 
 appointmentCloseButton.addEventListener("click", () => {
   if (appointmentForm) {

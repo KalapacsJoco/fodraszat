@@ -141,27 +141,6 @@ function displayAvailableAppointments(hairdresser, date) {
         }
     });
 }
-// Book appointment
-appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 : appointmentSubmitButton.addEventListener("click", () => {
-    if (selectedHairdresser &&
-        selectedDate &&
-        selectedTimeSlot &&
-        selectedService &&
-        (appointmentNameInput === null || appointmentNameInput === void 0 ? void 0 : appointmentNameInput.value) &&
-        (appointmentPhoneInput === null || appointmentPhoneInput === void 0 ? void 0 : appointmentPhoneInput.value)) {
-        const appointment = {
-            hairdresser_id: selectedHairdresser.id.toString(),
-            customer_name: appointmentNameInput.value,
-            customer_phone: appointmentPhoneInput.value,
-            appointment_date: `${selectedDate} ${selectedTimeSlot}`,
-            service: selectedService,
-        };
-        bookAppointment(appointment);
-    }
-    else {
-        alert("Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat.");
-    }
-});
 appointmentCloseButton.addEventListener("click", () => {
     if (appointmentForm) {
         appointmentForm.style.display = "none";

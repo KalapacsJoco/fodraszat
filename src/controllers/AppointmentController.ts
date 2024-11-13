@@ -3,9 +3,9 @@ import { APPOINTMENTS_URL } from '../apiConfig.js';
 import { Hairdresser } from '../models/Hairdresser';
 // import { displayAvailableAppointments } from '../view/AppointmentView.js';
 
-const appointmentSubmitButton = document.getElementById(
-    "appointment-submit"
-  ) as HTMLButtonElement;
+// const appointmentSubmitButton = document.getElementById(
+//     "appointment-submit"
+//   ) as HTMLButtonElement;
   const appointmentNameInput = document.getElementById(
     "appointment-name"
   ) as HTMLInputElement;

@@ -22,6 +22,10 @@ const closeModalButton = document.getElementById("close-modal");
 // Populate the select menu with hairdressers
 function loadHairdresserOptions() {
     return __awaiter(this, void 0, void 0, function* () {
+        const option = document.createElement("option");
+        // option.value = ""
+        option.textContent = "Válassz fodrászt";
+        hairdresserSelect.appendChild(option);
         try {
             const hairdressers = yield getHairdressers();
             hairdressers.forEach(hairdresser => {
@@ -80,8 +84,11 @@ function updateCalendar(appointments) {
             const month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1).toString();
             const day = dayNumber < 10 ? '0' + dayNumber : dayNumber.toString();
             const dayDate = `${today.getFullYear()}-${month}-${day}`;
-            // Filter appointments for the current day
-            const dayAppointments = appointments.filter(appointment => appointment.appointment_date.startsWith(dayDate));
+            // Az összes időpont szűrése a nap alapján
+            const dayAppointments = appointments.filter(appointment => {
+                const [appointmentDate] = appointment.appointment_date.split(' ');
+                return appointmentDate === dayDate;
+            });
             // Apply color based on whether appointments exist for the day
             if (dayAppointments.length > 0) {
                 if (dayAppointments.length >= 1 && dayAppointments.length <= 8) {
@@ -120,9 +127,6 @@ function updateCalendar(appointments) {
                     if (appointmentGrid) {
                         appointmentGrid.innerHTML = ""; // Korábbi időpontok törlése
                     }
-                    // Munkaidő: reggel 8:00-tól este 19:00-ig, félórás blokkokban
-                    // const workStart = 8 * 60; // Percben reggel 8:00
-                    // const workEnd = 19 * 60; // Percben este 19:00
                     for (let time = workStart; time < workEnd; time += 30) {
                         const timeSlot = document.createElement("div");
                         timeSlot.classList.add("time-slot");
@@ -154,8 +158,7 @@ function updateCalendar(appointments) {
         }
         calendarContainer.appendChild(dayDiv);
     }
-}
-// Close modal when clicking on the "close" button
+} // Close modal when clicking on the "close" button
 closeModalButton.addEventListener("click", () => {
     modal.style.display = "none"; // Hide the modal
 });
