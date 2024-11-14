@@ -43,7 +43,7 @@ function displayHairdresserStatistics(stats) {
             const hairdresserDiv = document.createElement('div');
             hairdresserDiv.textContent = `${stat.name}: ${stat.appointments} foglalás`;
             const lineDiv = document.createElement('div');
-            lineDiv.style.width = `${stat.percentage}%`;
+            lineDiv.style.width = `${stat.percentage * 10}px`;
             lineDiv.style.height = '10px';
             lineDiv.style.backgroundColor = 'blue'; // A vonal színe
             hairdresserDiv.appendChild(lineDiv);

@@ -74,7 +74,7 @@ function updateCalendar(appointments) {
                 if (dayAppointments.length >= 1 && dayAppointments.length <= 8) {
                     dayDiv.classList.add("work-day-soft");
                 }
-                else if (dayAppointments.length >= 9 && dayAppointments.length <= 17) {
+                else if (dayAppointments.length >= 9) {
                     dayDiv.classList.add("work-day-hard");
                 }
                 else {

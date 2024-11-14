@@ -32,9 +32,11 @@ export async function renderHairdresserStatistics(hairdresserId: number) {
   // Grafikon létrehozása
   for (let day = 1; day <= 30; day++) {
     const dayColumn = document.createElement("div");
+    // dayColumn.classList.add("columns");
+
     dayColumn.style.display = "inline-block";
-    dayColumn.style.width = "20px";
-    dayColumn.style.marginRight = "5px";
+    dayColumn.style.width = "15px";
+    dayColumn.style.marginRight = "10px";
     dayColumn.style.verticalAlign = "bottom";
     dayColumn.style.textAlign = "center"; // Középre igazítás
 
@@ -42,7 +44,7 @@ export async function renderHairdresserStatistics(hairdresserId: number) {
     const appointmentLine = document.createElement("div");
     appointmentLine.style.height = `${dailyAppointmentsCount[day] * 10}px`; // Magasság a foglalások száma alapján
     appointmentLine.style.width = "100%";
-    appointmentLine.style.backgroundColor = "blue";
+    appointmentLine.style.backgroundColor = (dailyAppointmentsCount[day] < 8) ? "blue" : "red";
 
     // Létrehozzuk a nap számát jelző elemet
     const dayLabel = document.createElement("div");
