@@ -7,21 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { getHairdressers } from './controllers/HairdresserController.js';
-import { formatTime } from './components/FormatTime.js';
-import { bookAppointment, checkIfBooked, getAppointments, } from './controllers/AppointmentController.js';
+import { getHairdressers } from "./controllers/HairdresserController.js";
+import { formatTime } from "./components/FormatTime.js";
+import { bookAppointment, checkIfBooked, getAppointments, } from "./controllers/AppointmentController.js";
+import { appointmentCloseButton, appointmentDateInput, appointmentForm, appointmentNameInput, appointmentPhoneInput, appointmentServices, appointmentSubmitButton, appointmentTimes, hairdresserList, } from "./components/domElements.js";
 // import { displayHairdressers } from './view/HairdressersView.js';
 // console.log(APPOINTMENTS_URL)
-// HTML elements
-const hairdresserList = document.getElementById("hairdresser-list");
-const appointmentForm = document.getElementById("appointment-form");
-const appointmentDateInput = document.getElementById("appointment-date");
-const appointmentTimes = document.getElementById("appointment-times");
-const appointmentServices = document.getElementById("appointment-services");
-const appointmentNameInput = document.getElementById("appointment-name");
-const appointmentPhoneInput = document.getElementById("appointment-phone");
-const appointmentSubmitButton = document.getElementById("appointment-submit");
-const appointmentCloseButton = document.getElementById("appointment-form-close-button");
 // // Variables to store selected appointment details
 let selectedTimeSlot = null;
 let selectedHairdresser = null;
@@ -50,7 +41,9 @@ function displayHairdressers() {
 
                 </div>
             `;
-                hairdresserList.innerHTML += hairdresserElement;
+                if (hairdresserList) {
+                    hairdresserList.innerHTML += hairdresserElement;
+                }
             });
             // Appointment button event handler
             const appointmentButtons = document.querySelectorAll(".hairdresser button");
@@ -86,9 +79,11 @@ function showAppointmentForm(hairdresser) {
                 checkbox.addEventListener("change", () => handleServiceSelection(checkbox));
                 const label = document.createElement("label");
                 label.textContent = service;
-                appointmentServices.appendChild(checkbox);
-                appointmentServices.appendChild(label);
-                appointmentServices.appendChild(document.createElement("br"));
+                if (appointmentServices) {
+                    appointmentServices.appendChild(checkbox);
+                    appointmentServices.appendChild(label);
+                    appointmentServices.appendChild(document.createElement("br"));
+                }
             });
         }
     }
@@ -137,10 +132,7 @@ appointmentCloseButton.addEventListener("click", () => {
         location.reload();
     }
 });
-// import { bookAppointment } from './bookAppointment';
-// import { displayAvailableAppointments } from './view/HairdressersView';
 appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 : appointmentSubmitButton.addEventListener("click", () => {
-    console.log(selectedHairdresser, selectedDate, selectedTimeSlot, selectedService, appointmentNameInput === null || appointmentNameInput === void 0 ? void 0 : appointmentNameInput.value, appointmentPhoneInput === null || appointmentPhoneInput === void 0 ? void 0 : appointmentPhoneInput.value);
     if (selectedHairdresser &&
         selectedDate &&
         selectedTimeSlot &&

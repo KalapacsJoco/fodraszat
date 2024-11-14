@@ -8,12 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { APPOINTMENTS_URL } from '../apiConfig.js';
-// import { displayAvailableAppointments } from '../view/AppointmentView.js';
-// const appointmentSubmitButton = document.getElementById(
-//     "appointment-submit"
-//   ) as HTMLButtonElement;
-const appointmentNameInput = document.getElementById("appointment-name");
-const appointmentPhoneInput = document.getElementById("appointment-phone");
 export function getAppointments() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

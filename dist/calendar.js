@@ -11,14 +11,7 @@ import { getHairdressers } from './controllers/HairdresserController.js';
 import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getAppointments, checkIfBooked } from './controllers/AppointmentController.js';
 import { formatTime } from './components/FormatTime.js';
-const calendarContainer = document.getElementById("calendar-container");
-const hairdresserSelect = document.getElementById("hairdresser-select");
-const today = new Date();
-// Modal elements
-const modal = document.getElementById("appointment-modal");
-const modalTitle = document.getElementById("modal-day-title");
-const modalInfo = document.getElementById("modal-appointment-info");
-const closeModalButton = document.getElementById("close-modal");
+import { calendarContainer, closeModalButton, hairdresserSelect, modal, modalTitle, today } from './components/domElements.js';
 // Populate the select menu with hairdressers
 function loadHairdresserOptions() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -170,10 +163,6 @@ function updateCalendar(appointments) {
 closeModalButton.addEventListener("click", () => {
     modal.style.display = "none"; // Hide the modal
 });
-// // Close modal when clicking on the "close" button
-// closeModalButton.addEventListener("click", () => {
-//     modal.style.display = "none"; // Hide the modal
-// });
 // Event listener for hairdresser selection
 hairdresserSelect.addEventListener("change", () => {
     const selectedHairdresserId = parseInt(hairdresserSelect.value, 10);

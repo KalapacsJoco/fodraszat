@@ -2,21 +2,14 @@ import { getHairdressers } from './controllers/HairdresserController.js';
 import { APPOINTMENTS_URL } from './apiConfig.js';
 import { getAppointments, checkIfBooked } from './controllers/AppointmentController.js';
 import { formatTime } from './components/FormatTime.js';
+import { calendarContainer, closeModalButton, hairdresserSelect, modal, modalTitle, today } from './components/domElements.js';
 
 type Appointment = {
     hairdresser_id: string;
     appointment_date: string;
 }
 
-const calendarContainer = document.getElementById("calendar-container") as HTMLElement;
-const hairdresserSelect = document.getElementById("hairdresser-select") as HTMLSelectElement;
-const today = new Date();
 
-// Modal elements
-const modal = document.getElementById("appointment-modal") as HTMLElement;
-const modalTitle = document.getElementById("modal-day-title") as HTMLElement;
-const modalInfo = document.getElementById("modal-appointment-info") as HTMLElement;
-const closeModalButton = document.getElementById("close-modal") as HTMLElement;
 
 // Populate the select menu with hairdressers
 async function loadHairdresserOptions() {
@@ -195,10 +188,7 @@ function updateCalendar(appointments: Appointment[]) {
 closeModalButton.addEventListener("click", () => {
     modal.style.display = "none"; // Hide the modal
 });
-// // Close modal when clicking on the "close" button
-// closeModalButton.addEventListener("click", () => {
-//     modal.style.display = "none"; // Hide the modal
-// });
+
 
 // Event listener for hairdresser selection
 hairdresserSelect.addEventListener("change", () => {
