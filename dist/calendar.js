@@ -11,6 +11,8 @@ import { loadHairdresserOptions } from './controllers/HairdresserController.js';
 import { APPOINTMENTS_URL } from './components/apiConfig.js';
 import { calendarContainer, closeModalButton, hairdresserSelect, modal, today } from './components/domElements.js';
 import { showModal } from './controllers/ModalController.js';
+import { getHairdresserStatistics } from './view/StatisticsView.js';
+import { renderHairdresserStatistics } from './view/RenderHairdresserStatistics.js';
 // Fetch all appointments and filter by the selected hairdresser ID
 function loadAppointmentsForHairdresser(hairdresserId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -107,13 +109,19 @@ function updateCalendar(appointments) {
 closeModalButton.addEventListener("click", () => {
     modal.style.display = "none"; // Hide the modal
 });
-// Event listener for hairdresser selection
-hairdresserSelect.addEventListener("change", () => {
-    const selectedHairdresserId = parseInt(hairdresserSelect.value, 10);
-    if (!isNaN(selectedHairdresserId)) {
-        loadAppointmentsForHairdresser(selectedHairdresserId);
-    }
-});
+if (!hairdresserSelect) {
+}
+else {
+    // Event listener for hairdresser selection
+    hairdresserSelect.addEventListener("change", () => {
+        const selectedHairdresserId = parseInt(hairdresserSelect.value, 10);
+        if (!isNaN(selectedHairdresserId)) {
+            loadAppointmentsForHairdresser(selectedHairdresserId);
+            renderHairdresserStatistics(selectedHairdresserId);
+        }
+    });
+}
+getHairdresserStatistics();
 // Initialize hairdresser options and calendar
 loadHairdresserOptions();
 updateCalendar([]); // Initial empty calendar

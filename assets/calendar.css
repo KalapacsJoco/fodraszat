@@ -1,5 +1,7 @@
 body {
-  background-color: #2f3d4c;
+  display: flex;
+  flex-direction: column;
+  background-color: #343a40;
 }
 
 /* Modal overlay */
@@ -36,7 +38,7 @@ body {
 }
 
 .time-slot {
-  color: lightgray;
+  color: #e9ecef;
 
   padding: 10px;
   border: 1px solid #ddd;
@@ -57,13 +59,17 @@ body {
   color: red;
 }
 
+#calendar {
+
+}
+
 #calendar-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px; /* Növelt térköz a napok között */
+  gap: 5px; /* Növelt térköz a napok között */
   width: 80%; /* Szélesebb naptár */
   margin: 20px auto;
-  border-radius: 10px; /* Lekerekített sarkok */
+  /* border-radius: 10px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enyhe árnyék */
 }
 
@@ -75,8 +81,8 @@ body {
 
 .calendar-day-header {
   padding: 15px; /* Növelt padding */
-  background-color: #333; /* Sötétszürke háttér */
-  color: white; /* Fehér szöveg */
+  background-color: #364859;
+  color: #e9ecef; /* Fehér szöveg */
   border: none;
   font-size: 1.1em;
 }
@@ -86,13 +92,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background-color: rgba(151, 159, 165, 0.75); */
+  /* background-color: #495057; */
   cursor: pointer;
   font-size: 1.3em;
   padding: 10px;
   transition: background-color 0.3s, color 0.3s;
-  border-radius: 5px;
-  cursor:default
+  border-radius: 10px;
+  cursor:default;
+  max-height: 20px;
 }
 
 /* .calendar-day:hover {
@@ -122,12 +129,13 @@ body {
 }
 
 .work-day-soft {
-  background-color: #f0ad4e; /* Világos narancssárga */
+  background: #364859;
   color: white;
 }
 
 .free-day {
-  background-color: #5cb85c; /* Világos zöld */
+  background-color: #495057; /* Világos narancssárga */
+
   color: white;
 }
 
@@ -141,8 +149,8 @@ body {
   top: 5px;
   left: 5px;
   width: 20px;
-  color: red;
-  border: thin solid red;
+  color: #ffffff;
+  /* border: thin solid #ced4da; */
   border-radius: 50%;
   font-size: 0.8em;
   display: flex; /* Flexbox használata a központosításhoz */
@@ -152,4 +160,24 @@ body {
 
 .appointments-info {
   padding-top: 20px;
+  color: #adb5bd;
+  font-size: 1rem;
+}
+
+#statistic-container {
+  display: flex;
+  align-items: end;
+  width: 80%;
+  margin: 20px auto;
+  /* margin: 20px; */
+}
+
+#statistic-appointments {
+width: 100%
+}
+
+#statistic-days {
+  display: flex;
+  align-items: end;
+width: 100%;
 }

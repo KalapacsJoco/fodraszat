@@ -1,6 +1,6 @@
 body {
   font-family: "Roboto", sans-serif; /* Modern betűtípus */
-  background-color: #2f3d4c;
+  background-color: #adb5bd;
   color: #333;
   margin: 0;
 }
@@ -8,7 +8,7 @@ body {
 h1 {
   text-align: center;
   padding: 20px;
-  background-color: #333;
+  background-color: #adb5bd;
   color: white;
   margin: 0;
 }
@@ -32,7 +32,7 @@ h1 {
 .hairdresser {
   /* border: thin solid black; */
   position: relative;
-  background-color: rgba(151, 159, 165, 0.75);
+  background-color: #748ca3;
   height: 350px;
   box-shadow: 0 10px 10px rgba(197, 196, 196, 0.25); /* Lágyabb árnyék */
   margin: 5px;
@@ -68,7 +68,7 @@ h1 {
 }
 
 .hairdresser button {
-  background-color: #01352c;
+  background-color: #6c757d;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -90,7 +90,7 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(151, 159, 165, 0.95);
+  background-color: #adb5bd;
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

@@ -1,12 +1,18 @@
 import {  loadHairdresserOptions } from './controllers/HairdresserController.js';
-import { APPOINTMENTS_URL } from './components/apiConfig.js';
+import { APPOINTMENTS_URL, HAIRDRESSERS_URL } from './components/apiConfig.js';
 import { calendarContainer, closeModalButton, hairdresserSelect, modal, today } from './components/domElements.js';
 import { showModal } from './controllers/ModalController.js';
+import { getHairdresserStatistics } from './view/StatisticsView.js';
+import { renderHairdresserStatistics } from './view/RenderHairdresserStatistics.js';
 
 type Appointment = {
     hairdresser_id: string;
     appointment_date: string;
 }
+type Hairdresser = {
+    id: number;
+    name: string;
+  }
 
 // Fetch all appointments and filter by the selected hairdresser ID
 async function loadAppointmentsForHairdresser(hairdresserId: number) {
@@ -121,14 +127,27 @@ closeModalButton.addEventListener("click", () => {
     modal.style.display = "none"; // Hide the modal
 });
 
+if(!hairdresserSelect) {
 
+} else {
 // Event listener for hairdresser selection
 hairdresserSelect.addEventListener("change", () => {
     const selectedHairdresserId = parseInt(hairdresserSelect.value, 10);
     if (!isNaN(selectedHairdresserId)) {
         loadAppointmentsForHairdresser(selectedHairdresserId);
+        renderHairdresserStatistics(selectedHairdresserId);
+
     }
 });
+}
+
+
+
+
+
+
+
+getHairdresserStatistics();
 
 // Initialize hairdresser options and calendar
 loadHairdresserOptions();
