@@ -7,32 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { getHairdressers } from './controllers/HairdresserController.js';
-import { APPOINTMENTS_URL } from './apiConfig.js';
-import { getAppointments, checkIfBooked } from './controllers/AppointmentController.js';
-import { formatTime } from './components/FormatTime.js';
-import { calendarContainer, closeModalButton, hairdresserSelect, modal, modalTitle, today } from './components/domElements.js';
-// Populate the select menu with hairdressers
-function loadHairdresserOptions() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const option = document.createElement("option");
-        // option.value = ""
-        option.textContent = "Válassz fodrászt";
-        hairdresserSelect.appendChild(option);
-        try {
-            const hairdressers = yield getHairdressers();
-            hairdressers.forEach(hairdresser => {
-                const option = document.createElement("option");
-                option.value = hairdresser.id.toString();
-                option.textContent = hairdresser.name;
-                hairdresserSelect.appendChild(option);
-            });
-        }
-        catch (error) {
-            console.error("Error loading hairdressers:", error);
-        }
-    });
-}
+import { loadHairdresserOptions } from './controllers/HairdresserController.js';
+import { APPOINTMENTS_URL } from './components/apiConfig.js';
+import { calendarContainer, closeModalButton, hairdresserSelect, modal, today } from './components/domElements.js';
+import { showModal } from './controllers/ModalController.js';
 // Fetch all appointments and filter by the selected hairdresser ID
 function loadAppointmentsForHairdresser(hairdresserId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -110,50 +88,16 @@ function updateCalendar(appointments) {
             dayDiv.appendChild(appointmentsInfo);
             // Show modal with appointment info on click
             dayDiv.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-                const hairdresserId = parseInt(hairdresserSelect.value, 10); // Selected hairdresser ID
-                modalTitle.textContent = `${dayNumber}. nap foglalásai`;
-                // Retrieve hairdresser details
-                const hairdressers = yield getHairdressers();
-                const hairdresser = hairdressers.find(h => h.id === hairdresserId);
-                if (hairdresser) {
-                    // Set working hours from hairdresser's data
-                    const workStart = parseInt(hairdresser.work_start_time.split(':')[0]) * 60;
-                    const workEnd = parseInt(hairdresser.work_end_time.split(':')[0]) * 60;
-                    // Get all appointments, filtered by the selected hairdresser and day
-                    const appointments = yield getAppointments();
-                    const filteredAppointments = appointments.filter(appointment => appointment.hairdresser_id === hairdresserId.toString() &&
-                        appointment.appointment_date.startsWith(`${today.getFullYear()}-${month}-${day}`));
-                    const appointmentGrid = document.getElementById("modal-appointment-grid");
-                    if (appointmentGrid) {
-                        appointmentGrid.innerHTML = ""; // Clear previous appointments
-                    }
-                    for (let time = workStart; time < workEnd; time += 30) {
-                        const timeSlot = document.createElement("div");
-                        timeSlot.classList.add("time-slot");
-                        const formattedTime = formatTime(time);
-                        timeSlot.textContent = formattedTime;
-                        // Check if this half-hour slot is booked
-                        const isBooked = checkIfBooked(filteredAppointments, hairdresserId, `${today.getFullYear()}-${month}-${day}`, formattedTime);
-                        if (isBooked) {
-                            const appointmentDetails = filteredAppointments.find(appointment => appointment.appointment_date.includes(formattedTime));
-                            timeSlot.classList.add("booked");
-                            // Display customer's name and phone number
-                            timeSlot.innerHTML = `
-                        <strong>${formattedTime}</strong><br>
-                        ${appointmentDetails === null || appointmentDetails === void 0 ? void 0 : appointmentDetails.customer_name}<br>
-                        ${appointmentDetails === null || appointmentDetails === void 0 ? void 0 : appointmentDetails.customer_phone}
-                      `;
-                        }
-                        if (appointmentGrid) {
-                            appointmentGrid.appendChild(timeSlot);
-                        }
-                    }
-                    modal.style.display = "flex"; // Display the modal
-                }
-                else {
-                    console.error('No hairdresser found with the given ID.');
-                }
+                const hairdresserId = parseInt(hairdresserSelect.value, 10); // Kiválasztott fodrász ID
+                const dayNumber = parseInt(dayDiv.textContent || "0", 10); // Nap száma (vagy más érték a DOM-ból)
+                // Modal megjelenítése a kiválasztott fodrásszal és nappal
+                yield showModal(dayNumber, hairdresserId, today.getFullYear(), month, day);
             }));
+            // Modal bezáró gomb kezelője
+            //   const closeModalButton = document.getElementById("modal-close-button") as HTMLElement;
+            //   closeModalButton.addEventListener("click", () => {
+            //     closeModal();
+            //   });
         }
         // Append dayDiv to the calendar container
         calendarContainer.appendChild(dayDiv);

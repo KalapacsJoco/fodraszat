@@ -1,6 +1,5 @@
 import { Appointment } from '../models/Appointment';
-import { APPOINTMENTS_URL } from '../apiConfig.js';
-import { Hairdresser } from '../models/Hairdresser';
+import { APPOINTMENTS_URL } from '../components/apiConfig.js';
 
 
 export async function getAppointments(): Promise<Appointment[]> {

@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { APPOINTMENTS_URL } from '../apiConfig.js';
+import { APPOINTMENTS_URL } from '../components/apiConfig.js';
 export function getAppointments() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
