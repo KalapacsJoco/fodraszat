@@ -34,7 +34,7 @@ h1 {
   position: relative;
   background-color: #748ca3;
   height: 350px;
-  box-shadow: 0 10px 10px rgba(197, 196, 196, 0.25); /* Lágyabb árnyék */
+  box-shadow: 2px 2px 2px 2px rgb(33, 86, 104);
   margin: 5px;
   margin-bottom: 35px;
   border-radius: 20px;
@@ -189,4 +189,18 @@ h1 {
 #appointment-form-close-button:hover {
   background-color: rgb(245, 76, 76); /* Sötétebb háttérszín hover-kor */
   color: #333; /* Sötétebb szöveg hover-kor */
+}
+
+.button {
+  background-color: #748ca3;
+  border: none;
+  padding: 10px;
+  font: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 2px rgb(33, 86, 104);
+}
+
+.button:hover {
+  background-color: #096c47;
 }

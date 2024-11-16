@@ -18,17 +18,14 @@ import {
   appointmentTimes,
   hairdresserList,
 } from "./components/domElements.js";
-// import { displayHairdressers } from './view/HairdressersView.js';
 
 // console.log(APPOINTMENTS_URL)
 
-// // Variables to store selected appointment details
 let selectedTimeSlot: string | null = null;
 let selectedHairdresser: Hairdresser | null = null;
 let selectedDate: string | null = null;
 let selectedService: string | null = null;
 
-// Display list of hairdressers
 async function displayHairdressers() {
   if (hairdresserList) {
     const hairdressers = await getHairdressers();
@@ -55,7 +52,6 @@ async function displayHairdressers() {
       }
     });
 
-    // Appointment button event handler
     const appointmentButtons = document.querySelectorAll(".hairdresser button");
     appointmentButtons.forEach((button) => {
       const buttonElement = button as HTMLElement;
@@ -73,13 +69,11 @@ async function displayHairdressers() {
   }
 }
 
-// Show appointment form
 function showAppointmentForm(hairdresser: Hairdresser) {
   if (appointmentForm) {
     appointmentForm.style.display = "block";
     selectedHairdresser = hairdresser;
 
-    // Generate service checkboxes
     if (appointmentServices) {
       // appointmentServices.innerHTML = '<h4>Szolgáltatások:</h4>';
       hairdresser.services.forEach((service) => {
@@ -111,7 +105,6 @@ function showAppointmentForm(hairdresser: Hairdresser) {
   }
 }
 
-// Display available appointments
 async function displayAvailableAppointments(
   hairdresser: Hairdresser,
   date: string
@@ -201,5 +194,4 @@ function handleServiceSelection(checkbox: HTMLInputElement) {
   selectedService = checkbox.checked ? checkbox.value : null;
 }
 
-// Initialize
 displayHairdressers();

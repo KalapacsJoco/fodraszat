@@ -16,8 +16,7 @@ export function getHairdresserStatistics() {
             const hairdressers = yield hairdressersResponse.json();
             const appointmentsResponse = yield fetch(APPOINTMENTS_URL);
             const appointments = yield appointmentsResponse.json();
-            const totalAppointments = appointments.length; // Összes foglalás száma
-            // Fodrászok foglalásainak kiszámítása
+            const totalAppointments = appointments.length;
             const hairdresserStats = hairdressers.map(hairdresser => {
                 const hairdresserAppointments = appointments.filter(appointment => appointment.hairdresser_id === hairdresser.id.toString()).length;
                 const percentage = Math.round((hairdresserAppointments / totalAppointments) * 100);
@@ -28,7 +27,6 @@ export function getHairdresserStatistics() {
                 };
             });
             hairdresserStats.sort((a, b) => b.appointments - a.appointments);
-            // Statisztikák megjelenítése
             displayHairdresserStatistics(hairdresserStats);
         }
         catch (error) {
@@ -38,14 +36,14 @@ export function getHairdresserStatistics() {
 }
 function displayHairdresserStatistics(stats) {
     if (statisticAppointments) {
-        statisticAppointments.innerHTML = ''; // Töröljük a korábbi tartalmat
+        statisticAppointments.innerHTML = '';
         stats.forEach(stat => {
             const hairdresserDiv = document.createElement('div');
-            hairdresserDiv.textContent = `${stat.name}: ${stat.appointments} foglalás`;
+            hairdresserDiv.textContent = `${stat.name}: ${stat.appointments}`;
             const lineDiv = document.createElement('div');
             lineDiv.style.width = `${stat.percentage * 10}px`;
             lineDiv.style.height = '10px';
-            lineDiv.style.backgroundColor = 'blue'; // A vonal színe
+            lineDiv.style.backgroundColor = '#0d47a1';
             hairdresserDiv.appendChild(lineDiv);
             statisticAppointments.appendChild(hairdresserDiv);
         });

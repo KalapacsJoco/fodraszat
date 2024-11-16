@@ -18,9 +18,8 @@ export async function getHairdresserStatistics() {
     const appointmentsResponse = await fetch(APPOINTMENTS_URL);
     const appointments: Appointment[] = await appointmentsResponse.json();
 
-    const totalAppointments = appointments.length; // Összes foglalás száma
+    const totalAppointments = appointments.length; 
 
-    // Fodrászok foglalásainak kiszámítása
     const hairdresserStats = hairdressers.map(hairdresser => {
       const hairdresserAppointments = appointments.filter(appointment => appointment.hairdresser_id === hairdresser.id.toString()).length;
       const percentage = Math.round((hairdresserAppointments / totalAppointments) * 100);
@@ -32,7 +31,6 @@ export async function getHairdresserStatistics() {
     });
     hairdresserStats.sort((a, b) => b.appointments - a.appointments);
 
-    // Statisztikák megjelenítése
     displayHairdresserStatistics(hairdresserStats);
 
   } catch (error) {
@@ -42,16 +40,16 @@ export async function getHairdresserStatistics() {
 
 function displayHairdresserStatistics(stats: { name: string, appointments: number, percentage: number }[]) {
   if (statisticAppointments) {
-    statisticAppointments.innerHTML = ''; // Töröljük a korábbi tartalmat
+    statisticAppointments.innerHTML = ''; 
 
     stats.forEach(stat => {
       const hairdresserDiv = document.createElement('div');
-      hairdresserDiv.textContent = `${stat.name}: ${stat.appointments} foglalás`;
+      hairdresserDiv.textContent = `${stat.name}: ${stat.appointments}`;
 
       const lineDiv = document.createElement('div');
       lineDiv.style.width = `${stat.percentage * 10}px`;
       lineDiv.style.height = '10px';
-      lineDiv.style.backgroundColor = 'blue'; // A vonal színe
+      lineDiv.style.backgroundColor = '#0d47a1'; 
 
       hairdresserDiv.appendChild(lineDiv);
       statisticAppointments.appendChild(hairdresserDiv);

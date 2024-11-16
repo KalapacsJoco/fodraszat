@@ -1,4 +1,3 @@
-// Hairdresser structure
 export interface Hairdresser {
     id: number;
     name: string;

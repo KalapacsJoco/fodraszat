@@ -13,13 +13,10 @@ export function renderHairdresserStatistics(hairdresserId) {
         const statisticContainer = document.getElementById("statistic-days");
         if (!statisticContainer)
             return;
-        statisticContainer.innerHTML = ""; // Törli az előző statisztikákat
-        // Foglalások lekérése az API-ról
+        statisticContainer.innerHTML = "";
         const response = yield fetch(APPOINTMENTS_URL);
         const appointments = yield response.json();
-        // Szűrés az adott fodrászhoz tartozó foglalásokra
         const filteredAppointments = appointments.filter((appointment) => appointment.hairdresser_id === hairdresserId.toString());
-        // Napi foglalások összesítése
         const dailyAppointmentsCount = {};
         for (let day = 1; day <= 30; day++) {
             dailyAppointmentsCount[day] = 0;
@@ -31,26 +28,21 @@ export function renderHairdresserStatistics(hairdresserId) {
                 dailyAppointmentsCount[day]++;
             }
         });
-        // Grafikon létrehozása
         for (let day = 1; day <= 30; day++) {
             const dayColumn = document.createElement("div");
-            // dayColumn.classList.add("columns");
             dayColumn.style.display = "inline-block";
             dayColumn.style.width = "15px";
             dayColumn.style.marginRight = "10px";
             dayColumn.style.verticalAlign = "bottom";
-            dayColumn.style.textAlign = "center"; // Középre igazítás
-            // Létrehozzuk a foglalások számának megfelelő vonalat
+            dayColumn.style.textAlign = "center";
             const appointmentLine = document.createElement("div");
-            appointmentLine.style.height = `${dailyAppointmentsCount[day] * 10}px`; // Magasság a foglalások száma alapján
+            appointmentLine.style.height = `${dailyAppointmentsCount[day] * 10}px`;
             appointmentLine.style.width = "100%";
-            appointmentLine.style.backgroundColor = (dailyAppointmentsCount[day] < 8) ? "blue" : "red";
-            // Létrehozzuk a nap számát jelző elemet
+            appointmentLine.style.backgroundColor = (dailyAppointmentsCount[day] < 8) ? "#0d47a1" : "#CC0000";
             const dayLabel = document.createElement("div");
             dayLabel.textContent = `${day}`;
-            dayLabel.style.marginTop = "5px"; // Kis távolság a vonal és a nap között
-            dayLabel.style.fontSize = "12px"; // Kisebb betűméret a nap számához
-            // Hozzáadjuk a vonalat és a nap számát az oszlophoz
+            dayLabel.style.marginTop = "5px";
+            dayLabel.style.fontSize = "12px";
             dayColumn.appendChild(appointmentLine);
             dayColumn.appendChild(dayLabel);
             statisticContainer.appendChild(dayColumn);

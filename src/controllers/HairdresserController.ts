@@ -22,6 +22,7 @@ export async function loadHairdresserOptions() {
       hairdressers.forEach(hairdresser => {
           const option = document.createElement("option");
           option.value = hairdresser.id.toString();
+          option.style.backgroundColor = "transparent";
           option.textContent = hairdresser.name;
           hairdresserSelect.appendChild(option);
       });

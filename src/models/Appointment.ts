@@ -1,4 +1,3 @@
-// Appointment structure
 export interface Appointment {
     id?: string;
     hairdresser_id: string;

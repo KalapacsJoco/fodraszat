@@ -28,11 +28,6 @@ export async function getAppointments(): Promise<Appointment[]> {
       );
     });
   }
-
-
-
-
-
   
   // Modified bookAppointment function with an optional callback
   export async function bookAppointment(appointment: Appointment, onSuccess?: () => void) {

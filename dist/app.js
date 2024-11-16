@@ -11,14 +11,11 @@ import { getHairdressers } from "./controllers/HairdresserController.js";
 import { formatTime } from "./components/FormatTime.js";
 import { bookAppointment, checkIfBooked, getAppointments, } from "./controllers/AppointmentController.js";
 import { appointmentCloseButton, appointmentDateInput, appointmentForm, appointmentNameInput, appointmentPhoneInput, appointmentServices, appointmentSubmitButton, appointmentTimes, hairdresserList, } from "./components/domElements.js";
-// import { displayHairdressers } from './view/HairdressersView.js';
 // console.log(APPOINTMENTS_URL)
-// // Variables to store selected appointment details
 let selectedTimeSlot = null;
 let selectedHairdresser = null;
 let selectedDate = null;
 let selectedService = null;
-// Display list of hairdressers
 function displayHairdressers() {
     return __awaiter(this, void 0, void 0, function* () {
         if (hairdresserList) {
@@ -45,7 +42,6 @@ function displayHairdressers() {
                     hairdresserList.innerHTML += hairdresserElement;
                 }
             });
-            // Appointment button event handler
             const appointmentButtons = document.querySelectorAll(".hairdresser button");
             appointmentButtons.forEach((button) => {
                 const buttonElement = button;
@@ -63,12 +59,10 @@ function displayHairdressers() {
         }
     });
 }
-// Show appointment form
 function showAppointmentForm(hairdresser) {
     if (appointmentForm) {
         appointmentForm.style.display = "block";
         selectedHairdresser = hairdresser;
-        // Generate service checkboxes
         if (appointmentServices) {
             // appointmentServices.innerHTML = '<h4>Szolgáltatások:</h4>';
             hairdresser.services.forEach((service) => {
@@ -94,7 +88,6 @@ function showAppointmentForm(hairdresser) {
         });
     }
 }
-// Display available appointments
 function displayAvailableAppointments(hairdresser, date) {
     return __awaiter(this, void 0, void 0, function* () {
         if (appointmentTimes) {
@@ -163,5 +156,4 @@ function handleServiceSelection(checkbox) {
     });
     selectedService = checkbox.checked ? checkbox.value : null;
 }
-// Initialize
 displayHairdressers();
