@@ -1,4 +1,3 @@
-import { Hairdresser } from "./models/Hairdresser";
 import { getHairdressers } from "./controllers/HairdresserController.js";
 import { bookAppointment } from "./controllers/AppointmentController.js";
 import {

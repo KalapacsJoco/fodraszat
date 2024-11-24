@@ -3,6 +3,8 @@ import {  HAIRDRESSERS_URL } from '../components/apiConfig.js';
 import { hairdresserSelect } from '../components/domElements.js';
 import { hairdresserList } from "../components/domElements.js";
 import { setSelectedService } from '../utils/state';
+import { loadAppointmentsForHairdresser } from './CalendarController.js';
+import { renderHairdresserStatistics } from '../view/RenderHairdresserStatistics.js';
 
 
 export async function getHairdressers(): Promise<Hairdresser[]> {
@@ -29,6 +31,18 @@ export async function loadHairdresserOptions() {
       });
   } catch (error) {
       console.error("Error loading hairdressers:", error);
+  }
+}
+
+export function handleHairdresserSelection() {
+  if (hairdresserSelect) {
+      hairdresserSelect.addEventListener('change', () => {
+          const selectedHairdresserId = parseInt(hairdresserSelect.value, 10);
+          if (!isNaN(selectedHairdresserId)) {
+              loadAppointmentsForHairdresser(selectedHairdresserId);
+              renderHairdresserStatistics(selectedHairdresserId);
+          }
+      });
   }
 }
 

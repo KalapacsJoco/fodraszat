@@ -9,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { HAIRDRESSERS_URL } from '../components/apiConfig.js';
 import { hairdresserSelect } from '../components/domElements.js';
+import { loadAppointmentsForHairdresser } from './CalendarController.js';
+import { renderHairdresserStatistics } from '../view/RenderHairdresserStatistics.js';
 export function getHairdressers() {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(HAIRDRESSERS_URL);
@@ -36,6 +38,17 @@ export function loadHairdresserOptions() {
             console.error("Error loading hairdressers:", error);
         }
     });
+}
+export function handleHairdresserSelection() {
+    if (hairdresserSelect) {
+        hairdresserSelect.addEventListener('change', () => {
+            const selectedHairdresserId = parseInt(hairdresserSelect.value, 10);
+            if (!isNaN(selectedHairdresserId)) {
+                loadAppointmentsForHairdresser(selectedHairdresserId);
+                renderHairdresserStatistics(selectedHairdresserId);
+            }
+        });
+    }
 }
 // src/controllers/HairdresserController.ts
 // src/controllers/HairdresserController.ts
