@@ -11,11 +11,7 @@ import { getHairdressers } from "./controllers/HairdresserController.js";
 import { formatTime } from "./components/FormatTime.js";
 import { bookAppointment, checkIfBooked, getAppointments, } from "./controllers/AppointmentController.js";
 import { appointmentCloseButton, appointmentDateInput, appointmentForm, appointmentNameInput, appointmentPhoneInput, appointmentServices, appointmentSubmitButton, appointmentTimes, hairdresserList, } from "./components/domElements.js";
-// console.log(APPOINTMENTS_URL)
-let selectedTimeSlot = null;
-let selectedHairdresser = null;
-let selectedDate = null;
-let selectedService = null;
+import { getSelectedTimeSlot, setSelectedTimeSlot, getSelectedHairdresser, setSelectedHairdresser, getSelectedDate, setSelectedDate, getSelectedService, setSelectedService, } from "./utils/state.js";
 function displayHairdressers() {
     return __awaiter(this, void 0, void 0, function* () {
         if (hairdresserList) {
@@ -48,8 +44,8 @@ function displayHairdressers() {
                 buttonElement.addEventListener("click", () => {
                     const hairdresserId = buttonElement.dataset.hairdresserId;
                     if (hairdresserId) {
-                        selectedHairdresser =
-                            hairdressers.find((h) => h.id === parseInt(hairdresserId)) || null;
+                        const selectedHairdresser = hairdressers.find((h) => h.id === parseInt(hairdresserId)) || null;
+                        setSelectedHairdresser(selectedHairdresser);
                         if (selectedHairdresser) {
                             showAppointmentForm(selectedHairdresser);
                         }
@@ -62,9 +58,8 @@ function displayHairdressers() {
 function showAppointmentForm(hairdresser) {
     if (appointmentForm) {
         appointmentForm.style.display = "block";
-        selectedHairdresser = hairdresser;
+        setSelectedHairdresser(hairdresser);
         if (appointmentServices) {
-            // appointmentServices.innerHTML = '<h4>Szolgáltatások:</h4>';
             hairdresser.services.forEach((service) => {
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
@@ -83,7 +78,7 @@ function showAppointmentForm(hairdresser) {
     }
     if (appointmentDateInput) {
         appointmentDateInput.addEventListener("change", () => {
-            selectedDate = appointmentDateInput.value;
+            setSelectedDate(appointmentDateInput.value);
             displayAvailableAppointments(hairdresser, appointmentDateInput.value);
         });
     }
@@ -92,7 +87,7 @@ function displayAvailableAppointments(hairdresser, date) {
     return __awaiter(this, void 0, void 0, function* () {
         if (appointmentTimes) {
             appointmentTimes.innerHTML = "";
-            selectedDate = date;
+            setSelectedDate(date);
             const startTime = parseInt(hairdresser.work_start_time.split(":")[0]) * 60;
             const endTime = parseInt(hairdresser.work_end_time.split(":")[0]) * 60;
             const appointments = yield getAppointments();
@@ -111,7 +106,7 @@ function displayAvailableAppointments(hairdresser, date) {
                         if (previouslySelected)
                             previouslySelected.classList.remove("selected");
                         timeSlot.classList.add("selected");
-                        selectedTimeSlot = formattedTime;
+                        setSelectedTimeSlot(formattedTime);
                     });
                 }
                 appointmentTimes.appendChild(timeSlot);
@@ -126,6 +121,10 @@ appointmentCloseButton.addEventListener("click", () => {
     }
 });
 appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 : appointmentSubmitButton.addEventListener("click", () => {
+    const selectedHairdresser = getSelectedHairdresser();
+    const selectedDate = getSelectedDate();
+    const selectedTimeSlot = getSelectedTimeSlot();
+    const selectedService = getSelectedService();
     if (selectedHairdresser &&
         selectedDate &&
         selectedTimeSlot &&
@@ -139,7 +138,6 @@ appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 
             appointment_date: `${selectedDate} ${selectedTimeSlot}`,
             service: selectedService,
         };
-        // `displayAvailableAppointments` meghívása callback-ként
         bookAppointment(appointment, () => {
             displayAvailableAppointments(selectedHairdresser, selectedDate);
         });
@@ -154,6 +152,6 @@ function handleServiceSelection(checkbox) {
         if (cb !== checkbox)
             cb.checked = false;
     });
-    selectedService = checkbox.checked ? checkbox.value : null;
+    setSelectedService(checkbox.checked ? checkbox.value : null);
 }
 displayHairdressers();

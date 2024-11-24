@@ -19,12 +19,16 @@ import {
   hairdresserList,
 } from "./components/domElements.js";
 
-// console.log(APPOINTMENTS_URL)
-
-let selectedTimeSlot: string | null = null;
-let selectedHairdresser: Hairdresser | null = null;
-let selectedDate: string | null = null;
-let selectedService: string | null = null;
+import {
+  getSelectedTimeSlot,
+  setSelectedTimeSlot,
+  getSelectedHairdresser,
+  setSelectedHairdresser,
+  getSelectedDate,
+  setSelectedDate,
+  getSelectedService,
+  setSelectedService,
+} from "./utils/state.js";
 
 async function displayHairdressers() {
   if (hairdresserList) {
@@ -58,8 +62,9 @@ async function displayHairdressers() {
       buttonElement.addEventListener("click", () => {
         const hairdresserId = buttonElement.dataset.hairdresserId;
         if (hairdresserId) {
-          selectedHairdresser =
+          const selectedHairdresser =
             hairdressers.find((h) => h.id === parseInt(hairdresserId)) || null;
+          setSelectedHairdresser(selectedHairdresser);
           if (selectedHairdresser) {
             showAppointmentForm(selectedHairdresser);
           }
@@ -72,10 +77,9 @@ async function displayHairdressers() {
 function showAppointmentForm(hairdresser: Hairdresser) {
   if (appointmentForm) {
     appointmentForm.style.display = "block";
-    selectedHairdresser = hairdresser;
+    setSelectedHairdresser(hairdresser);
 
     if (appointmentServices) {
-      // appointmentServices.innerHTML = '<h4>Szolgáltatások:</h4>';
       hairdresser.services.forEach((service) => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -87,11 +91,10 @@ function showAppointmentForm(hairdresser: Hairdresser) {
 
         const label = document.createElement("label");
         label.textContent = service;
-
         if (appointmentServices) {
-          appointmentServices.appendChild(checkbox);
-          appointmentServices.appendChild(label);
-          appointmentServices.appendChild(document.createElement("br"));
+        appointmentServices.appendChild(checkbox);
+        appointmentServices.appendChild(label);
+        appointmentServices.appendChild(document.createElement("br"));
         }
       });
     }
@@ -99,7 +102,7 @@ function showAppointmentForm(hairdresser: Hairdresser) {
 
   if (appointmentDateInput) {
     appointmentDateInput.addEventListener("change", () => {
-      selectedDate = appointmentDateInput.value;
+      setSelectedDate(appointmentDateInput.value);
       displayAvailableAppointments(hairdresser, appointmentDateInput.value);
     });
   }
@@ -111,7 +114,7 @@ async function displayAvailableAppointments(
 ) {
   if (appointmentTimes) {
     appointmentTimes.innerHTML = "";
-    selectedDate = date;
+    setSelectedDate(date);
 
     const startTime = parseInt(hairdresser.work_start_time.split(":")[0]) * 60;
     const endTime = parseInt(hairdresser.work_end_time.split(":")[0]) * 60;
@@ -140,7 +143,7 @@ async function displayAvailableAppointments(
           if (previouslySelected)
             previouslySelected.classList.remove("selected");
           timeSlot.classList.add("selected");
-          selectedTimeSlot = formattedTime;
+          setSelectedTimeSlot(formattedTime);
         });
       }
 
@@ -157,6 +160,11 @@ appointmentCloseButton.addEventListener("click", () => {
 });
 
 appointmentSubmitButton?.addEventListener("click", () => {
+  const selectedHairdresser = getSelectedHairdresser();
+  const selectedDate = getSelectedDate();
+  const selectedTimeSlot = getSelectedTimeSlot();
+  const selectedService = getSelectedService();
+
   if (
     selectedHairdresser &&
     selectedDate &&
@@ -173,9 +181,8 @@ appointmentSubmitButton?.addEventListener("click", () => {
       service: selectedService,
     };
 
-    // `displayAvailableAppointments` meghívása callback-ként
     bookAppointment(appointment, () => {
-      displayAvailableAppointments(selectedHairdresser!, selectedDate!);
+      displayAvailableAppointments(selectedHairdresser, selectedDate);
     });
   } else {
     alert(
@@ -191,7 +198,7 @@ function handleServiceSelection(checkbox: HTMLInputElement) {
   checkboxes.forEach((cb) => {
     if (cb !== checkbox) cb.checked = false;
   });
-  selectedService = checkbox.checked ? checkbox.value : null;
+  setSelectedService(checkbox.checked ? checkbox.value : null);
 }
 
 displayHairdressers();
