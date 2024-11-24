@@ -1,71 +1,66 @@
 import { Hairdresser } from "./models/Hairdresser";
-import { Appointment } from "./models/Appointment";
 import { getHairdressers } from "./controllers/HairdresserController.js";
-import { formatTime } from "./components/FormatTime.js";
-import {
-  bookAppointment,
-  checkIfBooked,
-  getAppointments,
-} from "./controllers/AppointmentController.js";
+import { bookAppointment } from "./controllers/AppointmentController.js";
 import {
   appointmentCloseButton,
-  appointmentDateInput,
-  appointmentForm,
+  appointmentSubmitButton,
+  hairdresserList,
   appointmentNameInput,
   appointmentPhoneInput,
-  appointmentServices,
-  appointmentSubmitButton,
-  appointmentTimes,
-  hairdresserList,
+  appointmentForm,
 } from "./components/domElements.js";
 
 import {
-  getSelectedTimeSlot,
-  setSelectedTimeSlot,
   getSelectedHairdresser,
-  setSelectedHairdresser,
   getSelectedDate,
-  setSelectedDate,
   getSelectedService,
-  setSelectedService,
+  getSelectedTimeSlot,
+  setSelectedHairdresser,
 } from "./utils/state.js";
 
+import { displayAvailableAppointments } from "./view/AppointmentView.js";
+import { showAppointmentForm } from "./view/AppointmentFormView.js";
+
+/**
+ * Fodrászok listájának megjelenítése.
+ */
 async function displayHairdressers() {
   if (hairdresserList) {
     const hairdressers = await getHairdressers();
+
     hairdressers.forEach((hairdresser) => {
       const servicesList = hairdresser.services
         .map((service) => `<li>${service}</li>`)
         .join("");
-      const hairdresserElement = `
-                <div class="hairdresser">
-                <div>
-                    <h3>${hairdresser.name}</h3>
-                    <p>${hairdresser.email}</p>
-                    <p>${hairdresser.phone_number}</p>
-                    <p>Munkaidő: ${hairdresser.work_start_time} - ${hairdresser.work_end_time}</p>
-                    <ul>${servicesList}</ul> 
-                    <button data-hairdresser-id="${hairdresser.id}">Időpontfoglalás</button>
-                    </div>
-                    <img src="/assets/images/${hairdresser.id}.jpg" alt="Kép leírása">
 
-                </div>
-            `;
+      const hairdresserElement = `
+        <div class="hairdresser">
+          <div>
+            <h3>${hairdresser.name}</h3>
+            <p>${hairdresser.email}</p>
+            <p>${hairdresser.phone_number}</p>
+            <p>Munkaidő: ${hairdresser.work_start_time} - ${hairdresser.work_end_time}</p>
+            <ul>${servicesList}</ul> 
+            <button data-hairdresser-id="${hairdresser.id}">Időpontfoglalás</button>
+          </div>
+          <img src="/assets/images/${hairdresser.id}.jpg" alt="Kép leírása">
+        </div>
+      `;
       if (hairdresserList) {
-        hairdresserList.innerHTML += hairdresserElement;
+      hairdresserList.innerHTML += hairdresserElement;
       }
     });
 
-    const appointmentButtons = document.querySelectorAll(".hairdresser button");
-    appointmentButtons.forEach((button) => {
+    // Eseménykezelő a foglalás gombokra
+    document.querySelectorAll(".hairdresser button").forEach((button) => {
       const buttonElement = button as HTMLElement;
       buttonElement.addEventListener("click", () => {
         const hairdresserId = buttonElement.dataset.hairdresserId;
         if (hairdresserId) {
           const selectedHairdresser =
             hairdressers.find((h) => h.id === parseInt(hairdresserId)) || null;
-          setSelectedHairdresser(selectedHairdresser);
           if (selectedHairdresser) {
+            setSelectedHairdresser(selectedHairdresser);
             showAppointmentForm(selectedHairdresser);
           }
         }
@@ -74,85 +69,7 @@ async function displayHairdressers() {
   }
 }
 
-function showAppointmentForm(hairdresser: Hairdresser) {
-  if (appointmentForm) {
-    appointmentForm.style.display = "block";
-    setSelectedHairdresser(hairdresser);
-
-    if (appointmentServices) {
-      hairdresser.services.forEach((service) => {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.name = "service";
-        checkbox.value = service;
-        checkbox.addEventListener("change", () =>
-          handleServiceSelection(checkbox)
-        );
-
-        const label = document.createElement("label");
-        label.textContent = service;
-        if (appointmentServices) {
-        appointmentServices.appendChild(checkbox);
-        appointmentServices.appendChild(label);
-        appointmentServices.appendChild(document.createElement("br"));
-        }
-      });
-    }
-  }
-
-  if (appointmentDateInput) {
-    appointmentDateInput.addEventListener("change", () => {
-      setSelectedDate(appointmentDateInput.value);
-      displayAvailableAppointments(hairdresser, appointmentDateInput.value);
-    });
-  }
-}
-
-async function displayAvailableAppointments(
-  hairdresser: Hairdresser,
-  date: string
-) {
-  if (appointmentTimes) {
-    appointmentTimes.innerHTML = "";
-    setSelectedDate(date);
-
-    const startTime = parseInt(hairdresser.work_start_time.split(":")[0]) * 60;
-    const endTime = parseInt(hairdresser.work_end_time.split(":")[0]) * 60;
-    const appointments = await getAppointments();
-
-    for (let time = startTime; time < endTime; time += 30) {
-      const timeSlot = document.createElement("div");
-      timeSlot.classList.add("time-slot");
-      const formattedTime = formatTime(time);
-      timeSlot.textContent = formattedTime;
-
-      const isBooked = checkIfBooked(
-        appointments,
-        hairdresser.id,
-        date,
-        formattedTime
-      );
-
-      if (isBooked) {
-        timeSlot.classList.add("booked");
-      } else {
-        timeSlot.addEventListener("click", () => {
-          const previouslySelected = document.querySelector(
-            ".time-slot.selected"
-          );
-          if (previouslySelected)
-            previouslySelected.classList.remove("selected");
-          timeSlot.classList.add("selected");
-          setSelectedTimeSlot(formattedTime);
-        });
-      }
-
-      appointmentTimes.appendChild(timeSlot);
-    }
-  }
-}
-
-appointmentCloseButton.addEventListener("click", () => {
+appointmentCloseButton?.addEventListener("click", () => {
   if (appointmentForm) {
     appointmentForm.style.display = "none";
     location.reload();
@@ -173,7 +90,7 @@ appointmentSubmitButton?.addEventListener("click", () => {
     appointmentNameInput?.value &&
     appointmentPhoneInput?.value
   ) {
-    const appointment: Appointment = {
+    const appointment = {
       hairdresser_id: selectedHairdresser.id.toString(),
       customer_name: appointmentNameInput.value,
       customer_phone: appointmentPhoneInput.value,
@@ -185,20 +102,9 @@ appointmentSubmitButton?.addEventListener("click", () => {
       displayAvailableAppointments(selectedHairdresser, selectedDate);
     });
   } else {
-    alert(
-      "Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat."
-    );
+    alert("Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat.");
   }
 });
 
-function handleServiceSelection(checkbox: HTMLInputElement) {
-  const checkboxes = document.querySelectorAll(
-    'input[name="service"]'
-  ) as NodeListOf<HTMLInputElement>;
-  checkboxes.forEach((cb) => {
-    if (cb !== checkbox) cb.checked = false;
-  });
-  setSelectedService(checkbox.checked ? checkbox.value : null);
-}
-
+// Fodrászok megjelenítése az oldal betöltésekor
 displayHairdressers();
