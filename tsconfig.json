@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es2017",       // Módosítva es2016-ról es2017-re
-    "module": "es6",
-    "rootDir": "./",
-    "esModuleInterop": true,
+    "target": "es6",
+    "module": "esnext",                // "es2015" (same as "es6") keeps ES module syntax
+    "rootDir": "./src",                   // Root directory for TypeScript source files
+    "outDir": "./dist",                // Output directory for compiled JavaScript files
+    "esModuleInterop": true,           // Allows compatibility with CommonJS and ES modules
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "moduleResolution": "node"         // Node-style module resolution for imports
+  },
+  "include": ["src/**/*.ts", "apiEndpoints.ts"],               // Matches all `.ts` files in the root folder
+  "exclude": ["node_modules"]
 }

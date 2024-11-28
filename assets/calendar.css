@@ -1,0 +1,220 @@
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: #343a40;
+  /* overflow: hidden; */
+}
+
+/* Modal overlay */
+/* Modal overlay */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: rgba(151, 159, 165, 1);
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  /* max-width: 400px; */
+  text-align: center;
+}
+
+.close {
+  /* position: absolute; */
+  right: 10px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.time-slot {
+  color: #e9ecef;
+
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #01352c;
+  text-align: center;
+  cursor: default;
+  height: 50px;
+}
+
+.time-slot.booked {
+  background-color: #c81912; /* Piros háttér foglalt időpontokhoz */
+  /* color: lightgray; */
+  cursor: not-allowed;
+}
+
+.close:hover {
+  color: red;
+}
+
+#calendar {
+
+}
+
+#calendar-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px; /* Növelt térköz a napok között */
+  width: 80%; /* Szélesebb naptár */
+  margin: 20px auto;
+  /* border-radius: 10px; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enyhe árnyék */
+}
+
+.calendar-header {
+  display: contents;
+  font-weight: bold;
+  text-align: center;
+}
+
+.calendar-day-header {
+  padding: 15px; /* Növelt padding */
+  background-color: #364859;
+  color: #e9ecef; /* Fehér szöveg */
+  border: none;
+  font-size: 1.1em;
+}
+
+.calendar-day {
+  position: relative; /* Pozícionálás a gyerek elemekhez */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #495057; */
+  cursor: pointer;
+  font-size: 1.3em;
+  padding: 10px;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 10px;
+  cursor:default;
+  max-height: 20px;
+}
+
+/* .calendar-day:hover {
+  background-color: rgba(151, 159, 165, 1); /* Sötétebb háttérszín hover-kor */
+  /* color: white;  */
+/* }  */
+
+/* .calendar-day.active {
+  background-color: #e0f2f7; 
+  color: #333; 
+  font-weight: bold;
+} */
+
+.appointment-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px; 
+  margin-top: 15px;
+  text-align: center;
+  overflow-y: auto; 
+  height: 350px;
+}
+
+.work-day-hard {
+  background-color: #d9534f; /* Világos piros */
+  color: white;
+}
+
+.work-day-soft {
+  background: #364859;
+  color: white;
+}
+
+.free-day {
+  background-color: #495057; /* Világos narancssárga */
+
+  color: white;
+}
+
+.free-day:hover, .work-day-hard:hover, .work-day-soft:hover, .free-day:hover {
+  background-color: lightgray; /* Világos zöld */
+  cursor: pointer;
+}
+
+.day-number {
+  position: absolute; /* Fix pozíció a szülőhöz képest */
+  top: 5px;
+  left: 5px;
+  /* width: 20px; */
+  color: #ffffff;
+  /* border: thin solid #ced4da; */
+  border-radius: 50%;
+  font-size: 0.8em;
+  display: flex; /* Flexbox használata a központosításhoz */
+  align-items: center; /* Függőleges középre igazítás */
+  justify-content: center; /* Vízszintes középre igazítás */
+}
+
+.appointments-info {
+  padding-top: 20px;
+  color: #adb5bd;
+  font-size: 1rem;
+  padding-bottom: 10px;
+}
+
+#statistic-container {
+  display: flex;
+  align-items: end;
+  width: 80%;
+  margin: 20px auto;
+  /* margin: 20px; */
+}
+
+#statistic-appointments {
+width: 100%
+}
+
+#statistic-days {
+  display: flex;
+  align-items: end;
+width: 100%;
+}
+
+#hairdresser-select {
+  /* color: #e9ecef; */
+  background-color: transparent;
+  width: 250px;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: auto;
+  padding-top: 10px;
+}
+
+.button {
+  background-color: #364859;
+  border: none;
+  padding: 10px;
+  font: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 2px rgb(33, 86, 104);
+}
+
+.button:hover {
+  background-color: #495057;
+}
+
+.today {
+  box-shadow: inset 0 0 0 5px #8cbd8c; /* Belső zöld keret */
+}
+
+
+

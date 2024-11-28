@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
-    <h1>Online fodrász időpontfoglaló</h1>
-
+    <nav>
+      <h1>Online fodrász időpontfoglaló</h1>
+      <a href="/calendar.html">
+        <button class="button">Naptár megtekintése</button>
+      </a>
+      
+    </nav>
     <div class="container">
       <div id="hairdresser-list" class="hairdresser-list"></div>
     </div>
@@ -29,9 +34,10 @@
       <input type="text" id="appointment-name" /><br /><br />
       <label for="appointment-phone">Telefonszám:</label>
       <input type="tel" id="appointment-phone" /><br /><br />
+      
       <button id="appointment-submit">Foglalás</button>
     </div>
 
-    <script src="app.js"></script>
+    <script src="/dist/app.js" type="module"></script>
   </body>
 </html>
