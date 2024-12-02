@@ -16,9 +16,18 @@ export function getHairdresserStatistics() {
             const hairdressers = yield hairdressersResponse.json();
             const appointmentsResponse = yield fetch(APPOINTMENTS_URL);
             const appointments = yield appointmentsResponse.json();
-            const totalAppointments = appointments.length;
-            const hairdresserStats = hairdressers.map(hairdresser => {
-                const hairdresserAppointments = appointments.filter(appointment => appointment.hairdresser_id === hairdresser.id.toString()).length;
+            // Szűrés az aktuális hónapra és évre
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth(); // 0-indexelt (január = 0)
+            const currentYear = currentDate.getFullYear();
+            const filteredAppointments = appointments.filter((appointment) => {
+                const appointmentDate = new Date(appointment.appointment_date);
+                return (appointmentDate.getMonth() === currentMonth &&
+                    appointmentDate.getFullYear() === currentYear);
+            });
+            const totalAppointments = filteredAppointments.length;
+            const hairdresserStats = hairdressers.map((hairdresser) => {
+                const hairdresserAppointments = filteredAppointments.filter((appointment) => appointment.hairdresser_id === hairdresser.id.toString()).length;
                 const percentage = Math.round((hairdresserAppointments / totalAppointments) * 100);
                 return {
                     name: hairdresser.name,
@@ -30,20 +39,20 @@ export function getHairdresserStatistics() {
             displayHairdresserStatistics(hairdresserStats);
         }
         catch (error) {
-            console.error('Hiba történt az adatok lekérése során:', error);
+            console.error("Hiba történt az adatok lekérése során:", error);
         }
     });
 }
 function displayHairdresserStatistics(stats) {
     if (statisticAppointments) {
-        statisticAppointments.innerHTML = '';
-        stats.forEach(stat => {
-            const hairdresserDiv = document.createElement('div');
+        statisticAppointments.innerHTML = ""; // Törli az előző statisztikákat
+        stats.forEach((stat) => {
+            const hairdresserDiv = document.createElement("div");
             hairdresserDiv.textContent = `${stat.name}: ${stat.appointments}`;
-            const lineDiv = document.createElement('div');
-            lineDiv.style.width = `${stat.percentage * 10}px`;
-            lineDiv.style.height = '10px';
-            lineDiv.style.backgroundColor = '#0d47a1';
+            const lineDiv = document.createElement("div");
+            lineDiv.style.width = `${stat.percentage * 2}px`;
+            lineDiv.style.height = "10px";
+            lineDiv.style.backgroundColor = "#0d47a1";
             hairdresserDiv.appendChild(lineDiv);
             statisticAppointments.appendChild(hairdresserDiv);
         });

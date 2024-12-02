@@ -90,5 +90,19 @@ appointmentSubmitButton === null || appointmentSubmitButton === void 0 ? void 0 
         alert("Kérjük, válasszon egy időpontot, szolgáltatást, és adja meg a szükséges adatokat.");
     }
 });
+//csak hétköznap lehessen időpontot foglalni
+document.addEventListener("DOMContentLoaded", () => {
+    const appointmentDateInput = document.getElementById("appointment-date");
+    if (appointmentDateInput) {
+        appointmentDateInput.addEventListener("change", () => {
+            const selectedDate = new Date(appointmentDateInput.value);
+            const dayOfWeek = selectedDate.getDay(); // 0: vasárnap, 6: szombat
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                alert("Időpontfoglalás csak hétköznapokon lehetséges!");
+                appointmentDateInput.value = ""; // Reset az input értékét
+            }
+        });
+    }
+});
 // Fodrászok megjelenítése az oldal betöltésekor
 displayHairdressers();

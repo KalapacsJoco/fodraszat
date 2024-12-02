@@ -1,12 +1,11 @@
+"use strict";
 // import { appointmentDateInput, appointmentForm, appointmentServices } from "../components/domElements";
 // import { setSelectedDate, setSelectedHairdresser } from "../utils/state";
-
 // // Show appointment form
 // function showAppointmentForm(hairdresser: Hairdresser) {
 //     if (appointmentForm) {
 //       appointmentForm.style.display = "block";
 //       setSelectedHairdresser = hairdresser;
-  
 //       // Generate service checkboxes
 //       if (appointmentServices) {
 //         // appointmentServices.innerHTML = '<h4>Szolgáltatások:</h4>';
@@ -18,7 +17,6 @@
 //           checkbox.addEventListener("change", () =>
 //             handleServiceSelection(checkbox)
 //           );
-  
 //           const label = document.createElement("label");
 //           label.textContent = service;
 //           if (appointmentServices) {
@@ -29,7 +27,6 @@
 //         });
 //       }
 //     }
-  
 //     if (appointmentDateInput) {
 //       appointmentDateInput.addEventListener("change", () => {
 //         setSelectedDate = appointmentDateInput.value;
@@ -37,4 +34,3 @@
 //       });
 //     }
 //   }
-  
